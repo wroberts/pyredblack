@@ -31,7 +31,8 @@ int main ( int argc, char **argv )
     for (vector<int>::iterator it=myvector.begin(); it!=myvector.end(); ++it)
     {
         cout << "inserting " << (*it) << "..." << endl;
-        tree.insert(*it);
+        int foundVal;
+        tree.insert(*it, foundVal);
         cout << "tree: " << tree.to_string() << endl;
         printTreeValues(tree);
     }
@@ -40,7 +41,8 @@ int main ( int argc, char **argv )
     for (vector<int>::iterator it=myvector.begin(); it!=myvector.end(); ++it)
     {
         cout << "removing " << (*it) << "..." << endl;
-        tree.remove(*it);
+        int foundVal;
+        tree.remove(*it, foundVal);
         cout << "tree: " << tree.to_string() << endl;
         printTreeValues(tree);
     }
