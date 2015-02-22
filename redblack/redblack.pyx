@@ -42,26 +42,33 @@ cdef class redblackdict(object):
     '''Red-black-tree-based associative array.'''
 
     cdef PairRBTree *_tree
+    cdef int _num_nodes
 
     def __cinit__(self):
         '''Constructor.'''
         self._tree = new PairRBTree()
+        self._num_nodes = 0
 
     def __dealloc__(self):
         if self._tree is not NULL:
             del self._tree
 
     def __len__(self):
-        return None
+        return self._num_nodes
 
     def __getitem__(self, key):
-        return None
+        value = self._tree.get_value_for_key(key)
+        if value is None:
+            raise KeyError(key)
+        return value
 
     def __setitem__(self, key, value):
-        pass
+        if self._tree.set_key(key, value):
+            self._num_nodes += 1
 
     def __delitem__(self, key):
-        pass
+        if self._tree.del_key(key):
+            self._num_nodes -= 1
 
     def __contains__(self, key):
         return None
