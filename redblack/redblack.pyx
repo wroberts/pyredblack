@@ -30,7 +30,7 @@ cdef extern from "pyredblack.h":
         #bool insert(pyobjpairw value)
         #bool remove(pyobjpairw value)
         bool del_key(object key)
-        object get_value_for_key(object key)
+        object get_value_for_key(object key, bool &found)
         bool set_key(object key, object value)
         PairRBTreeIterator begin()
         PairRBTreeIterator end()
@@ -57,8 +57,9 @@ cdef class redblackdict(object):
         return self._num_nodes
 
     def __getitem__(self, key):
-        value = self._tree.get_value_for_key(key)
-        if value is None:
+        cdef bool found
+        value = self._tree.get_value_for_key(key, found)
+        if not found:
             raise KeyError(key)
         return value
 

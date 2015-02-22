@@ -46,7 +46,7 @@ public:
         }
         return false;
     };
-    PyObject* get_value_for_key(PyObject *key)
+    PyObject* get_value_for_key(PyObject *key, bool &out_found)
     {
         PairNode* current;
         int dir;
@@ -54,8 +54,10 @@ public:
         find(probe, current, dir);
         if (dir == 0)
         {
+            out_found = true;
             return current->value.first;
         }
+        out_found = false;
         return Py_None;
     };
     bool set_key(PyObject *key, PyObject *value)
