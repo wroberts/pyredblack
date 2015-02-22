@@ -428,6 +428,7 @@ RedBlackTree<Type, Comp>::remove(Type value)
     if (remove_left) parent->left = childNode;
     else if (parent) parent->right = childNode;
     else this->root = childNode;
+    if (childNode) childNode->parent = parent;
     removeNode->left = removeNode->right = 0;
     // if removeNode is red, replace it with its child, which must be
     // a leaf child
@@ -439,7 +440,6 @@ RedBlackTree<Type, Comp>::remove(Type value)
 
     // remaining cases: removeNode is black and childNode is black
     // start by replacing remove with child
-    if (childNode) childNode->parent = parent;
     delete removeNode;
     // loop to rebalance
     Node<Type> *current = childNode;
