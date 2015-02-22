@@ -70,6 +70,8 @@ cdef class redblackdict(object):
     def __delitem__(self, key):
         if self._tree.del_key(key):
             self._num_nodes -= 1
+        else:
+            raise KeyError(key)
 
     def __contains__(self, key):
         return None
