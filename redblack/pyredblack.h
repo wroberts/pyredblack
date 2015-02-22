@@ -56,7 +56,7 @@ public:
         {
             return current->value.first;
         }
-        return 0;
+        return Py_None;
     };
     bool set_key(PyObject *key, PyObject *value)
     {
