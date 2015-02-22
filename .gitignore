@@ -1,3 +1,6 @@
 *.o
 *~
+/build/
+/redblack.so
+/redblack/redblack.cpp
 /test
