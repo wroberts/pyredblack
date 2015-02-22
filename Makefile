@@ -1,5 +1,5 @@
-TARGET   = redblack
-OBJS     = redblack.o
+TARGET   = test
+OBJS     = test.o
 FLAGS    = -g -O0 -Wall
 INCLUDES =
 LIBS     =

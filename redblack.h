@@ -1,8 +1,10 @@
-#include <string>
+#ifndef _REDBLACK_H_
+#define _REDBLACK_H_
+
 #include <iostream>
-#include <vector>
-#include <exception>
+//#include <exception>
 #include <assert.h>
+#include <string>
 using namespace std;
 
 // http://stackoverflow.com/a/5590404/1062499
@@ -26,6 +28,50 @@ public:
 };
 
 template <typename Type>
+class RedBlackTreeIterator
+{
+public:
+    RedBlackTreeIterator(Node<Type> *s);
+    ~RedBlackTreeIterator();
+
+    RedBlackTreeIterator<Type>& operator=(const RedBlackTreeIterator<Type>&);
+    RedBlackTreeIterator<Type>& operator++();
+    Node<Type>& operator*() const;
+    bool operator==(const RedBlackTreeIterator<Type>&);
+    bool operator!=(const RedBlackTreeIterator<Type>&);
+private:
+    Node<Type> *current;
+};
+
+template <typename Type, typename Comp = std::less< Type > >
+class RedBlackTree
+{
+public:
+    RedBlackTree();
+    virtual ~RedBlackTree();
+
+    void find(Type in_Value, Node<Type>* &out_pNode, int &dir);
+    bool insert(Type value);
+    bool remove(Type value);
+
+    RedBlackTreeIterator<Type> begin();
+    RedBlackTreeIterator<Type> end();
+
+    string to_string();
+private:
+    string _to_string(Node<Type> *node);
+    void left_rotate(Node<Type> *node);
+    void right_rotate(Node<Type> *node);
+
+    Node<Type> *root;
+    Comp comp;
+};
+
+// ======================================================================
+//  NODE
+// ======================================================================
+
+template <typename Type>
 Node<Type>::Node(Type val)
 {
     this->value = val;
@@ -42,21 +88,10 @@ Node<Type>::~Node()
     if (this->right) delete this->right;
 }
 
-template <typename Type>
-class RedBlackTreeIterator
-{
-public:
-    RedBlackTreeIterator(Node<Type> *s);
-    ~RedBlackTreeIterator();
 
-    RedBlackTreeIterator<Type>& operator=(const RedBlackTreeIterator<Type>&);
-    RedBlackTreeIterator<Type>& operator++();
-    Node<Type>& operator*() const;
-    bool operator==(const RedBlackTreeIterator<Type>&);
-    bool operator!=(const RedBlackTreeIterator<Type>&);
-private:
-    Node<Type> *current;
-};
+// ======================================================================
+//  ITERATOR
+// ======================================================================
 
 template <typename Type>
 RedBlackTreeIterator<Type>::RedBlackTreeIterator(Node<Type>*s)
@@ -143,29 +178,10 @@ RedBlackTreeIterator<Type>::operator!=(const RedBlackTreeIterator<Type> &i)
     return (this->current != i.current);
 }
 
-template <typename Type, typename Comp = std::less< Type > >
-class RedBlackTree
-{
-public:
-    RedBlackTree();
-    virtual ~RedBlackTree();
 
-    void find(Type in_Value, Node<Type>* &out_pNode, int &dir);
-    bool insert(Type value);
-    bool remove(Type value);
-
-    RedBlackTreeIterator<Type> begin();
-    RedBlackTreeIterator<Type> end();
-
-    string to_string();
-private:
-    string _to_string(Node<Type> *node);
-    void left_rotate(Node<Type> *node);
-    void right_rotate(Node<Type> *node);
-
-    Node<Type> *root;
-    Comp comp;
-};
+// ======================================================================
+//  TREE
+// ======================================================================
 
 template <typename Type, typename Comp>
 RedBlackTree<Type, Comp>::RedBlackTree()
@@ -624,76 +640,4 @@ RedBlackTree<Type, Comp>::right_rotate(Node<Type> *node)
     node->parent = left_child;
 }
 
-#include <algorithm>
-#include <ctime>
-#include <cstdlib>
-
-void printTreeValues(RedBlackTree<int> &t)
-{
-    cout << "values: ";
-    for (RedBlackTreeIterator<int> i = t.begin(); i != t.end(); ++i)
-    {
-        cout << (*i).value << " ";
-    }
-    cout << endl;
-}
-
-int main ( int argc, char **argv )
-{
-    cout << "Hello, world!" << endl;
-
-    vector<int> myvector;
-    for (int i=1; i<=10; ++i) myvector.push_back(i);
-    srand ( unsigned ( time(0) ) );
-    //random_shuffle ( myvector.begin(), myvector.end() );
-
-    RedBlackTree<int> tree;
-    cout << "empty tree: " << tree.to_string() << endl;
-
-    for (vector<int>::iterator it=myvector.begin(); it!=myvector.end(); ++it)
-    {
-        cout << "inserting " << (*it) << "..." << endl;
-        tree.insert(*it);
-        cout << "tree: " << tree.to_string() << endl;
-        printTreeValues(tree);
-    }
-
-    random_shuffle ( myvector.begin(), myvector.end() );
-    for (vector<int>::iterator it=myvector.begin(); it!=myvector.end(); ++it)
-    {
-        cout << "removing " << (*it) << "..." << endl;
-        tree.remove(*it);
-        cout << "tree: " << tree.to_string() << endl;
-        printTreeValues(tree);
-    }
-/*
-  cout << "inserting 1..." << endl;
-  tree.insert(1);
-  cout << "tree: " << tree.to_string() << endl;
-  cout << "inserting 2..." << endl;
-  tree.insert(2);
-  cout << "tree: " << tree.to_string() << endl;
-  cout << "inserting 3..." << endl;
-  tree.insert(3);
-  cout << "tree: " << tree.to_string() << endl;
-  cout << "inserting 4..." << endl;
-  tree.insert(4);
-  cout << "tree: " << tree.to_string() << endl;
-  cout << "inserting 5..." << endl;
-  tree.insert(5);
-  cout << "tree: " << tree.to_string() << endl;
-  cout << "inserting 7..." << endl;
-  tree.insert(7);
-  cout << "tree: " << tree.to_string() << endl;
-  cout << "inserting 8..." << endl;
-  tree.insert(8);
-  cout << "tree: " << tree.to_string() << endl;
-  cout << "inserting 9..." << endl;
-  tree.insert(9);
-  cout << "tree: " << tree.to_string() << endl;
-  cout << "inserting 6..." << endl;
-  tree.insert(6);
-  cout << "tree: " << tree.to_string() << endl;*/
-
-    return 0;
-}
+#endif /* _REDBLACK_H_ */
