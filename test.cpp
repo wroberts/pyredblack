@@ -1,3 +1,4 @@
+#define DEBUG
 #include "redblack/redblack.h"
 
 #include <iostream>

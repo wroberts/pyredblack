@@ -57,9 +57,13 @@ public:
     RedBlackTreeIterator<Type> begin();
     RedBlackTreeIterator<Type> end();
 
+#ifdef DEBUG
     string to_string();
+#endif // DEBUG
 private:
+#ifdef DEBUG
     string _to_string(Node<Type> *node);
+#endif // DEBUG
     void left_rotate(Node<Type> *node);
     void right_rotate(Node<Type> *node);
 
@@ -567,6 +571,7 @@ RedBlackTree<Type, Comp>::end()
     return RedBlackTreeIterator<Type>(0);
 }
 
+#ifdef DEBUG
 template <typename Type, typename Comp>
 string
 RedBlackTree<Type, Comp>::to_string()
@@ -590,6 +595,7 @@ RedBlackTree<int, std::less< int > >::_to_string(Node<int> *node)
     result += "]";
     return result;
 }
+#endif // DEBUG
 
 template <typename Type, typename Comp>
 void

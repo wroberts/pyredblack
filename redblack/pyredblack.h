@@ -36,18 +36,30 @@ class PairRBTree : RedBlackTree<pyobjpairw, pyobjpaircmp>
 public:
     bool del_key(PyObject *key)
     {
+#ifdef DEBUG
+        cout << "del_key begin " << to_string() << endl;
+#endif // DEBUG
         pyobjpairw probe(key, Py_None);
         pyobjpairw found;
         if (remove(probe, found))
         {
             Py_XDECREF(found.first);
             Py_XDECREF(found.second);
+#ifdef DEBUG
+            cout << "del_key end " << to_string() << endl;
+#endif // DEBUG
             return true;
         }
+#ifdef DEBUG
+        cout << "del_key end " << to_string() << endl;
+#endif // DEBUG
         return false;
     };
     PyObject* get_value_for_key(PyObject *key, bool &out_found)
     {
+#ifdef DEBUG
+        cout << "get_key begin " << to_string() << endl;
+#endif // DEBUG
         PairNode* current;
         int dir;
         pyobjpairw probe(key, Py_None);
@@ -62,6 +74,9 @@ public:
     };
     bool set_key(PyObject *key, PyObject *value)
     {
+#ifdef DEBUG
+        cout << "set_key begin " << to_string() << endl;
+#endif // DEBUG
         pyobjpairw probe(key, value);
         pyobjpairw found;
         if (insert(probe, found))
@@ -69,6 +84,9 @@ public:
             // storing a value
             Py_XINCREF(key);
             Py_XINCREF(value);
+#ifdef DEBUG
+            cout << "set_key end " << to_string() << endl;
+#endif // DEBUG
             return true;
         }
         else
@@ -77,11 +95,15 @@ public:
             Py_XDECREF(found.second);
             found.second = value;
             Py_XINCREF(value);
+#ifdef DEBUG
+            cout << "set_key end " << to_string() << endl;
+#endif // DEBUG
             return false;
         }
     };
 };
 
+#ifdef DEBUG
 template<>
 string
 RedBlackTree<pyobjpairw, pyobjpaircmp>::_to_string(PairNode *node)
@@ -98,5 +120,6 @@ RedBlackTree<pyobjpairw, pyobjpaircmp>::_to_string(PairNode *node)
     result += "]";
     return result;
 };
+#endif // DEBUG
 
 #endif /* _PYREDBLACK_H_ */
