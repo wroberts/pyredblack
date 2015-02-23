@@ -67,7 +67,7 @@ public:
         if (dir == 0)
         {
             out_found = true;
-            return current->value.first;
+            return current->value.second;
         }
         out_found = false;
         return Py_None;
