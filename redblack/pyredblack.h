@@ -82,4 +82,21 @@ public:
     };
 };
 
+template<>
+string
+RedBlackTree<pyobjpairw, pyobjpaircmp>::_to_string(PairNode *node)
+{
+    string result = "[";
+    if (node)
+    {
+        if (node->left)
+            result += _to_string(node->left) + " ";
+        result = result + (node->red ? "R" : "B") + " " + "*";
+        if (node->right)
+            result += " " + _to_string(node->right);
+    }
+    result += "]";
+    return result;
+};
+
 #endif /* _PYREDBLACK_H_ */
