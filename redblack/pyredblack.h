@@ -25,7 +25,7 @@ struct pyobjpaircmp
 {
     bool operator()(pyobjpairw &o1, pyobjpairw &o2)
     {
-        return (PyObject_RichCompareBool(o1.first, o2.first, Py_LE) == 1);
+        return (PyObject_RichCompareBool(o1.first, o2.first, Py_LT) == 1);
     }
 };
 
