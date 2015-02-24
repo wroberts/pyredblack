@@ -42,7 +42,7 @@ pyobjrepr(PyObject *o)
 }
 #endif // DEBUG
 
-class PairRBTree : RedBlackTree<pyobjpairw, pyobjpaircmp>
+class PairRBTree : public RedBlackTree<pyobjpairw, pyobjpaircmp>
 {
 public:
     bool del_key(PyObject *key)
