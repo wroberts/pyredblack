@@ -35,6 +35,7 @@ cdef extern from "pyredblack.h":
         bool set_key(object key, object value)
         PairRBTreeIterator begin()
         PairRBTreeIterator end()
+        void clear_objs()
 
 cdef class dict(object):
     '''Red-black-tree-based associative array.'''
