@@ -58,7 +58,7 @@ cdef class dict(object):
         return self._num_nodes
 
     def __getitem__(self, key):
-        cdef bool found
+        cdef bool found = False
         value = self._tree.get_value_for_key(key, found)
         if not found:
             raise KeyError(key)
