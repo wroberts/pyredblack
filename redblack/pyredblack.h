@@ -31,6 +31,17 @@ struct pyobjpaircmp
 
 typedef RedBlackTreeIterator<pyobjpairw> PairRBTreeIterator;
 
+#ifdef DEBUG
+string
+pyobjrepr(PyObject *o)
+{
+    PyObject *reprstr = PyObject_Repr(o);
+    string rv(PyString_AsString(reprstr));
+    Py_XDECREF(reprstr);
+    return rv;
+}
+#endif // DEBUG
+
 class PairRBTree : RedBlackTree<pyobjpairw, pyobjpaircmp>
 {
 public:
@@ -91,6 +102,10 @@ public:
         }
         else
         {
+#ifdef DEBUG
+            cout << "found existing value " << pyobjrepr(found->second)
+                 << " for key " << pyobjrepr(key) << endl;
+#endif // DEBUG
             // overwriting a value
             Py_XDECREF(found.second);
             found.second = value;
