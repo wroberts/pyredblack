@@ -35,9 +35,6 @@ cdef extern from "pyredblack.h":
         PairRBTreeIterator begin()
         PairRBTreeIterator end()
 
-def myfunc():
-    print 'hello world'
-
 cdef class redblackdict(object):
     '''Red-black-tree-based associative array.'''
 
