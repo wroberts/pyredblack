@@ -58,11 +58,14 @@ cdef class dict(object):
     def __len__(self):
         return self._num_nodes
 
+    def __missing__(self, key):
+        raise KeyError(key)
+
     def __getitem__(self, key):
         cdef bool found = False
         value = self._tree.get_value_for_key(key, found)
         if not found:
-            raise KeyError(key)
+            return self.__missing__(key)
         return value
 
     def __setitem__(self, key, value):
