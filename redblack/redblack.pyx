@@ -1,5 +1,5 @@
 from libcpp cimport bool
-#from cpython.ref cimport PyObject
+from cpython.ref cimport PyObject
 from cython.operator import dereference, preincrement
 
 #cdef extern from "<utility>" namespace "std":
@@ -12,8 +12,8 @@ cdef extern from "pyredblack.h":
     cdef cppclass pyobjpairw:
         pyobjpairw() except +
         pyobjpairw(object a, object b) except +
-        object getFirst() const
-        object getSecond() const
+        PyObject* getFirst() const
+        PyObject* getSecond() const
 
     cdef cppclass PairNode:
         pyobjpairw value
@@ -125,20 +125,20 @@ cdef class dict(object):
     def iterkeys(self):
         cdef PairRBTreeIterator it = self._tree.begin()
         while it != self._tree.end():
-            yield dereference(it).value.getFirst()
+            yield <object>dereference(it).value.getFirst()
             preincrement(it)
 
     def itervalues(self):
         cdef PairRBTreeIterator it = self._tree.begin()
         while it != self._tree.end():
-            yield dereference(it).value.getSecond()
+            yield <object>dereference(it).value.getSecond()
             preincrement(it)
 
     def iteritems(self):
         cdef PairRBTreeIterator it = self._tree.begin()
         while it != self._tree.end():
-            yield (dereference(it).value.getFirst(),
-                   dereference(it).value.getSecond())
+            yield (<object>dereference(it).value.getFirst(),
+                   <object>dereference(it).value.getSecond())
             preincrement(it)
 
     def pop(self):
