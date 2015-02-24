@@ -10,8 +10,8 @@ from libcpp cimport bool
 cdef extern from "pyredblack.h":
     cdef cppclass pyobjpairw:
         pyobjpair "pair"(object a, object b) except +
-        object first() const
-        object second() const
+        object getFirst() const
+        object getSecond() const
 
     cdef cppclass PairNode:
         pyobjpairw value
