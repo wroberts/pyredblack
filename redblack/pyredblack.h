@@ -89,7 +89,7 @@ public:
         cout << "set_key begin " << to_string() << endl;
 #endif // DEBUG
         pyobjpairw probe(key, value);
-        pyobjpairw found;
+        pyobjpairw *found = 0;
         if (insert(probe, found))
         {
             // storing a value
@@ -107,8 +107,8 @@ public:
                  << " for key " << pyobjrepr(key) << endl;
 #endif // DEBUG
             // overwriting a value
-            Py_XDECREF(found.second);
-            found.second = value;
+            Py_XDECREF(found->second);
+            found->second = value;
             Py_XINCREF(value);
 #ifdef DEBUG
             cout << "set_key end " << to_string() << endl;
