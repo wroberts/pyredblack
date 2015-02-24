@@ -97,7 +97,8 @@ cdef class dict(object):
         raise NotImplementedError
 
     def clear(self):
-        raise NotImplementedError
+        self._tree.clear_objs()
+        self._num_nodes = 0
 
     def setdefault(self):
         raise NotImplementedError
