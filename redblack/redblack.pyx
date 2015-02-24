@@ -71,49 +71,49 @@ cdef class dict(object):
             raise KeyError(key)
 
     def __contains__(self, key):
-        return None
+        raise NotImplementedError
 
     def __iter__(self):
-        return None
+        raise NotImplementedError
 
     def keys(self):
-        return None
+        raise NotImplementedError
 
     def values(self):
-        return None
+        raise NotImplementedError
 
     def items(self):
-        return None
+        raise NotImplementedError
 
     def has_key(self):
-        return None
+        raise NotImplementedError
 
     def get(self):
-        return None
+        raise NotImplementedError
 
     def clear(self):
-        return None
+        raise NotImplementedError
 
     def setdefault(self):
-        return None
+        raise NotImplementedError
 
     def iterkeys(self):
-        return None
+        raise NotImplementedError
 
     def itervalues(self):
-        return None
+        raise NotImplementedError
 
     def iteritems(self):
-        return None
+        raise NotImplementedError
 
     def pop(self):
-        return None
+        raise NotImplementedError
 
     def popitem(self):
-        return None
+        raise NotImplementedError
 
     def copy(self):
-        return None
+        raise NotImplementedError
 
     def update(self):
-        return None
+        raise NotImplementedError
