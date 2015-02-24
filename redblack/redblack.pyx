@@ -97,18 +97,26 @@ cdef class dict(object):
     def items(self):
         return list(self.iteritems())
 
-    def has_key(self):
-        raise NotImplementedError
+    def has_key(self, key):
+        return self.__contains__(key)
 
-    def get(self):
-        raise NotImplementedError
+    def get(self, key, default=None):
+        try:
+            return self.__getitem__(key)
+        except KeyError:
+            return default
 
     def clear(self):
         self._tree.clear_objs()
         self._num_nodes = 0
 
-    def setdefault(self):
-        raise NotImplementedError
+    def setdefault(self, key, default = None):
+        # TODO: this could be one tree access instead of two
+        try:
+            return self.__getitem__(key)
+        except KeyError:
+            self.__setitem__(key, default)
+            return default
 
     def iterkeys(self):
         cdef PairRBTreeIterator it = self._tree.begin()
