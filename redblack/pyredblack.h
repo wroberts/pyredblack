@@ -1,6 +1,8 @@
 #ifndef _PYREDBLACK_H_
 #define _PYREDBLACK_H_
 
+#define DEBUG
+
 #include <Python.h>
 #include "redblack.h"
 #include <utility>
