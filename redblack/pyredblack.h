@@ -116,6 +116,15 @@ public:
             return false;
         }
     };
+    void clear_objs()
+    {
+        for (PairRBTreeIterator it = begin(); it != end(); ++it)
+        {
+            Py_XDECREF((*it).value.first);
+            Py_XDECREF((*it).value.second);
+        }
+        clear();
+    };
 };
 
 #ifdef DEBUG
