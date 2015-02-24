@@ -54,6 +54,7 @@ public:
     void find(Type in_Value, Node<Type>* &out_pNode, int &dir);
     bool insert(Type value, Type* &out_pFoundValue);
     bool remove(Type value, Type &out_foundValue);
+    void clear();
 
     RedBlackTreeIterator<Type> begin();
     RedBlackTreeIterator<Type> end();
@@ -559,6 +560,15 @@ RedBlackTree<Type, Comp>::remove(Type value, Type &out_foundValue)
         assert(0);
     }
 }
+
+template <typename Type, typename Comp>
+void
+RedBlackTree<Type, Comp>::clear()
+{
+    if (this->root) delete this->root;
+    this->root = 0;
+};
+
 
 template <typename Type, typename Comp>
 RedBlackTreeIterator<Type>
