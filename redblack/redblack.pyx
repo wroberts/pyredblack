@@ -17,6 +17,7 @@ cdef extern from "pyredblack.h":
         pyobjpairw value
 
     cdef cppclass PairRBTreeIterator:
+        PairRBTreeIterator() except +
         PairRBTreeIterator(PairNode *s) except +
         PairRBTreeIterator& equals "operator="(const PairRBTreeIterator&)
         PairRBTreeIterator& operator++()
