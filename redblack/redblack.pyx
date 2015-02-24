@@ -1,5 +1,6 @@
 from libcpp cimport bool
 #from cpython.ref cimport PyObject
+from cython.operator import dereference, preincrement
 
 #cdef extern from "<utility>" namespace "std":
 #    cdef cppclass pair[K,V]:
@@ -78,16 +79,16 @@ cdef class dict(object):
         raise NotImplementedError
 
     def __iter__(self):
-        raise NotImplementedError
+        return self.iterkeys()
 
     def keys(self):
-        raise NotImplementedError
+        return list(self.iterkeys())
 
     def values(self):
-        raise NotImplementedError
+        return list(self.itervalues())
 
     def items(self):
-        raise NotImplementedError
+        return list(self.iteritems())
 
     def has_key(self):
         raise NotImplementedError
@@ -102,13 +103,23 @@ cdef class dict(object):
         raise NotImplementedError
 
     def iterkeys(self):
-        raise NotImplementedError
+        cdef PairRBTreeIterator it = self._tree.begin()
+        while it != self._tree.end():
+            yield dereference(it).value.getFirst()
+            preincrement(it)
 
     def itervalues(self):
-        raise NotImplementedError
+        cdef PairRBTreeIterator it = self._tree.begin()
+        while it != self._tree.end():
+            yield dereference(it).value.getSecond()
+            preincrement(it)
 
     def iteritems(self):
-        raise NotImplementedError
+        cdef PairRBTreeIterator it = self._tree.begin()
+        while it != self._tree.end():
+            yield (dereference(it).value.getFirst(),
+                   dereference(it).value.getSecond())
+            preincrement(it)
 
     def pop(self):
         raise NotImplementedError
