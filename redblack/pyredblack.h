@@ -75,7 +75,7 @@ public:
         int dir;
         pyobjpairw probe(key, Py_None);
         find(probe, current, dir);
-        if (dir == 0)
+        if (current && dir == 0)
         {
             out_found = true;
             return current->value.second;
