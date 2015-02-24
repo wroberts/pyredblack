@@ -51,6 +51,7 @@ cdef class dict(object):
 
     def __dealloc__(self):
         if self._tree is not NULL:
+            self._tree.clear_objs()
             del self._tree
 
     def __len__(self):
