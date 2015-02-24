@@ -27,7 +27,7 @@ cdef extern from "pyredblack.h":
 
     cdef cppclass PairRBTree:
         PairRBTree() except +
-        #void find(pyobjpairw in_Value, PairNode* &out_pNode, int &dir)
+        void find(pyobjpairw in_Value, PairNode* &out_pNode, int &dir)
         #bool insert(pyobjpairw value)
         #bool remove(pyobjpairw value)
         bool del_key(object key)
