@@ -52,7 +52,7 @@ public:
     virtual ~RedBlackTree();
 
     void find(Type in_Value, Node<Type>* &out_pNode, int &dir);
-    bool insert(Type value, Type* &out_pFoundValue);
+    bool insert(Type value, Node<Type>* &out_pFoundNode);
     bool remove(Type value, Type &out_foundValue);
     void clear();
 
@@ -261,7 +261,7 @@ RedBlackTree<Type, Comp>::find ( Type         in_Value,
  */
 template <typename Type, typename Comp>
 bool
-RedBlackTree<Type, Comp>::insert(Type value, Type* &out_pFoundValue)
+RedBlackTree<Type, Comp>::insert(Type value, Node<Type>* &out_pFoundNode)
 {
     Node<Type> *pNewNode = new Node<Type>(value);
     Node<Type> *current;
@@ -271,17 +271,17 @@ RedBlackTree<Type, Comp>::insert(Type value, Type* &out_pFoundValue)
     {
         this->root = pNewNode;
         this->root->red = false;
-        out_pFoundValue = &pNewNode->value;
+        out_pFoundNode = pNewNode;
         return true;
     }
     if (dir == 0)
     {
         // tree already contains the value, quit now
         delete pNewNode;
-        out_pFoundValue = &current->value;
+        out_pFoundNode = current;
         return false;
     }
-    out_pFoundValue = &pNewNode->value;
+    out_pFoundNode = pNewNode;
     // current is an internal node of the tree
     if (dir < 0)
     {
