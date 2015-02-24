@@ -76,7 +76,14 @@ cdef class dict(object):
             raise KeyError(key)
 
     def __contains__(self, key):
-        raise NotImplementedError
+        cdef pyobjpairw probe
+        probe = pyobjpairw(key, None)
+        cdef PairNode* node = NULL
+        cdef int dir = 0
+        self._tree.find(probe, node, dir)
+        if dir == 0:
+            return True
+        return False
 
     def __iter__(self):
         return self.iterkeys()
