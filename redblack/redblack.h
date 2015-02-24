@@ -31,6 +31,7 @@ template <typename Type>
 class RedBlackTreeIterator
 {
 public:
+    RedBlackTreeIterator();
     RedBlackTreeIterator(Node<Type> *s);
     ~RedBlackTreeIterator();
 
@@ -96,6 +97,12 @@ Node<Type>::~Node()
 // ======================================================================
 //  ITERATOR
 // ======================================================================
+
+template <typename Type>
+RedBlackTreeIterator<Type>::RedBlackTreeIterator()
+{
+    this->current = 0;
+}
 
 template <typename Type>
 RedBlackTreeIterator<Type>::RedBlackTreeIterator(Node<Type>*s)
