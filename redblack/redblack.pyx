@@ -104,10 +104,11 @@ cdef class dict(object):
         return self.__contains__(key)
 
     def get(self, key, default=None):
-        try:
-            return self.__getitem__(key)
-        except KeyError:
+        cdef bool found = False
+        value = self._tree.get_value_for_key(key, found)
+        if not found:
             return default
+        return value
 
     def clear(self):
         self._tree.clear_objs()
