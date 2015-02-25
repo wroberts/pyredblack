@@ -152,7 +152,14 @@ cdef class rbset(object):
         `other`. Sets are disjoint if and only if their intersection
         is the empty set.
         '''
-        raise NotImplementedError
+        try:
+            otherhas = other.__contains__
+        except AttributeError:
+            otherhas = rbset(other).__contains__
+        for elem in self:
+            if otherhas(elem):
+                return False
+        return True
 
     def issubset(self, other):
         '''Test whether every element in the set is in `other`.'''
