@@ -92,7 +92,7 @@ class TestDict(unittest.TestCase):
         for _try in range(15):
             d1 = dict()
             d2 = redblack.dict()
-            for _iter in range(5000):
+            for _iter in range(50000):
                 num = random.randint(0, 10000)
                 key = 'big string key value {}'.format(num)
                 val = 'big string value value {}'.format(num)
@@ -101,8 +101,8 @@ class TestDict(unittest.TestCase):
                     d1[key] = val
                     d2[key] = val
                 elif op == 1:
-                    d1.pop(key)
-                    d2.pop(key)
+                    d1.pop(key, None)
+                    d2.pop(key, None)
             self.assertEqual(len(d1), len(d2))
             self.assertEqual(sorted(d1.keys()), sorted(d2.keys()))
             self.assertEqual(sorted(d1.values()), sorted(d2.values()))
