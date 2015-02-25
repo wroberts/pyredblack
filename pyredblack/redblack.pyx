@@ -75,10 +75,13 @@ cdef class rbset(object):
     cdef ObjectRBTree *_tree
     cdef int _num_nodes
 
-    def __cinit__(self, iterable = None):
-        '''Constructor.'''
+    def __cinit__(self):
+        '''C Constructor.'''
         self._tree = new ObjectRBTree()
         self._num_nodes = 0
+
+    def __init__(self, iterable = None):
+        '''Python Constructor.'''
         self.update(iterable)
 
     def __dealloc__(self):
@@ -308,10 +311,13 @@ cdef class rbdict(object):
     cdef PairRBTree *_tree
     cdef int _num_nodes
 
-    def __cinit__(self, mapping = None, **kwargs):
-        '''Constructor.'''
+    def __cinit__(self):
+        '''C Constructor.'''
         self._tree = new PairRBTree()
         self._num_nodes = 0
+
+    def __init__(self, mapping = None, **kwargs):
+        '''Python Constructor.'''
         self.update(mapping, **kwargs)
 
     def __dealloc__(self):
