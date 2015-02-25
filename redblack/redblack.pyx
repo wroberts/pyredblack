@@ -15,21 +15,18 @@ cdef extern from "pyredblack.h":
         PyObject* getFirst() const
         PyObject* getSecond() const
 
-    cdef cppclass PairNode:
-        pyobjpairw value
-
     cdef cppclass PairRBTreeIterator:
         PairRBTreeIterator() except +
-        PairRBTreeIterator(PairNode *s) except +
         PairRBTreeIterator& equals "operator="(const PairRBTreeIterator&)
         PairRBTreeIterator& operator++()
-        PairNode& operator*() const
+        pyobjpairw& operator*() const
         bool operator==(const PairRBTreeIterator&)
         bool operator!=(const PairRBTreeIterator&)
+        int getDir()
 
     cdef cppclass PairRBTree:
         PairRBTree() except +
-        void find(pyobjpairw in_Value, PairNode* &out_pNode, int &dir)
+        PairRBTreeIterator find(pyobjpairw in_Value)
         #bool insert(pyobjpairw value)
         #bool remove(pyobjpairw value)
         bool del_key(object key)
@@ -81,10 +78,8 @@ cdef class dict(object):
     def __contains__(self, key):
         cdef pyobjpairw probe
         probe = pyobjpairw(key, None)
-        cdef PairNode* node = NULL
-        cdef int dir = 0
-        self._tree.find(probe, node, dir)
-        if dir == 0:
+        cdef PairRBTreeIterator it = self._tree.find(probe)
+        if it.getDir() == 0:
             return True
         return False
 
@@ -125,20 +120,20 @@ cdef class dict(object):
     def iterkeys(self):
         cdef PairRBTreeIterator it = self._tree.begin()
         while it != self._tree.end():
-            yield <object>dereference(it).value.getFirst()
+            yield <object>dereference(it).getFirst()
             preincrement(it)
 
     def itervalues(self):
         cdef PairRBTreeIterator it = self._tree.begin()
         while it != self._tree.end():
-            yield <object>dereference(it).value.getSecond()
+            yield <object>dereference(it).getSecond()
             preincrement(it)
 
     def iteritems(self):
         cdef PairRBTreeIterator it = self._tree.begin()
         while it != self._tree.end():
-            yield (<object>dereference(it).value.getFirst(),
-                   <object>dereference(it).value.getSecond())
+            yield (<object>dereference(it).getFirst(),
+                   <object>dereference(it).getSecond())
             preincrement(it)
 
     def pop(self):

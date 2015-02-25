@@ -24,44 +24,58 @@ public:
     Node *right;
     Node *parent;
     bool red;
-//private:
-};
-
-template <typename Type>
-class RedBlackTreeIterator
-{
-public:
-    RedBlackTreeIterator();
-    RedBlackTreeIterator(Node<Type> *s);
-    ~RedBlackTreeIterator();
-
-    RedBlackTreeIterator<Type>& operator=(const RedBlackTreeIterator<Type>&);
-    RedBlackTreeIterator<Type>& operator++();
-    Node<Type>& operator*() const;
-    bool operator==(const RedBlackTreeIterator<Type>&);
-    bool operator!=(const RedBlackTreeIterator<Type>&);
-private:
-    Node<Type> *current;
 };
 
 template <typename Type, typename Comp = std::less< Type > >
+class RedBlackTree;
+
+template <typename Type, typename Comp = std::less< Type > >
+class RedBlackTreeIterator
+{
+    friend class RedBlackTree<Type, Comp>;
+
+public:
+    RedBlackTreeIterator();
+    RedBlackTreeIterator(Node<Type> *s, int d);
+    ~RedBlackTreeIterator();
+
+    RedBlackTreeIterator<Type, Comp>& operator=(const RedBlackTreeIterator<Type, Comp>&);
+    RedBlackTreeIterator<Type, Comp>& operator++();
+    Type& operator*() const;
+    bool operator==(const RedBlackTreeIterator<Type, Comp>&);
+    bool operator!=(const RedBlackTreeIterator<Type, Comp>&);
+
+    bool        valid() const {return (this->current != 0);}
+    int         getDir() const {return this->dir;};
+protected:
+    Node<Type>* getNode() const {return this->current;};
+private:
+    Node<Type> *current;
+    int dir;
+};
+
+template <typename Type, typename Comp>
 class RedBlackTree
 {
 public:
     RedBlackTree();
     virtual ~RedBlackTree();
 
-    void find(Type in_Value, Node<Type>* &out_pNode, int &dir);
-    bool insert(Type value, Type* &out_pFoundValue);
-    bool remove(Type value, Type &out_foundValue);
+    RedBlackTreeIterator<Type, Comp> find(const Type &in_Value) const;
+    bool insert(Type value, RedBlackTreeIterator<Type, Comp> &out_Value);
+    bool remove(Type value, Type &out_Value);
     void clear();
 
-    RedBlackTreeIterator<Type> begin();
-    RedBlackTreeIterator<Type> end();
+    RedBlackTreeIterator<Type, Comp> begin();
+    RedBlackTreeIterator<Type, Comp> end();
 
 #ifdef DEBUG
     string to_string();
 #endif // DEBUG
+protected:
+    Node<Type>* getNode(RedBlackTreeIterator<Type, Comp> &it) const
+    {return it.getNode();};
+
 private:
 #ifdef DEBUG
     string _to_string(Node<Type> *node);
@@ -99,35 +113,37 @@ Node<Type>::~Node()
 //  ITERATOR
 // ======================================================================
 
-template <typename Type>
-RedBlackTreeIterator<Type>::RedBlackTreeIterator()
+template <typename Type, typename Comp>
+RedBlackTreeIterator<Type, Comp>::RedBlackTreeIterator()
 {
     this->current = 0;
+    this->dir = 0;
 }
 
-template <typename Type>
-RedBlackTreeIterator<Type>::RedBlackTreeIterator(Node<Type>*s)
+template <typename Type, typename Comp>
+RedBlackTreeIterator<Type, Comp>::RedBlackTreeIterator(Node<Type>*s, int d)
 {
     this->current = s;
+    this->dir = d;
 }
 
-template <typename Type>
-RedBlackTreeIterator<Type>::~RedBlackTreeIterator()
+template <typename Type, typename Comp>
+RedBlackTreeIterator<Type, Comp>::~RedBlackTreeIterator()
 {
 
 }
 
-template <typename Type>
-RedBlackTreeIterator<Type>&
-RedBlackTreeIterator<Type>::operator=(const RedBlackTreeIterator<Type> &i)
+template <typename Type, typename Comp>
+RedBlackTreeIterator<Type, Comp>&
+RedBlackTreeIterator<Type, Comp>::operator=(const RedBlackTreeIterator<Type, Comp> &i)
 {
     this->current = i.current;
     return *this;
 }
 
-template <typename Type>
-RedBlackTreeIterator<Type>&
-RedBlackTreeIterator<Type>::operator++()
+template <typename Type, typename Comp>
+RedBlackTreeIterator<Type, Comp>&
+RedBlackTreeIterator<Type, Comp>::operator++()
 {
     if (!this->current)
         throw exception();
@@ -164,28 +180,28 @@ RedBlackTreeIterator<Type>::operator++()
     return *this;
 }
 
-template <typename Type>
-Node<Type>&
-RedBlackTreeIterator<Type>::operator*() const
+template <typename Type, typename Comp>
+Type&
+RedBlackTreeIterator<Type, Comp>::operator*() const
 {
     if (this->current)
     {
-        return *(this->current);
+        return this->current->value;
     }
     else
         throw exception();
 }
 
-template <typename Type>
+template <typename Type, typename Comp>
 bool
-RedBlackTreeIterator<Type>::operator==(const RedBlackTreeIterator<Type> &i)
+RedBlackTreeIterator<Type, Comp>::operator==(const RedBlackTreeIterator<Type, Comp> &i)
 {
     return (this->current == i.current);
 }
 
-template <typename Type>
+template <typename Type, typename Comp>
 bool
-RedBlackTreeIterator<Type>::operator!=(const RedBlackTreeIterator<Type> &i)
+RedBlackTreeIterator<Type, Comp>::operator!=(const RedBlackTreeIterator<Type, Comp> &i)
 {
     return (this->current != i.current);
 }
@@ -216,40 +232,36 @@ RedBlackTree<Type, Comp>::~RedBlackTree()
  * \return <Comp>>
  */
 template <typename Type, typename Comp>
-void
-RedBlackTree<Type, Comp>::find ( Type         in_Value,
-                                 Node<Type>* &out_pNode,
-                                 int         &out_Dir )
+RedBlackTreeIterator<Type, Comp>
+RedBlackTree<Type, Comp>::find ( const Type &in_Value ) const
 {
-    out_pNode = this->root;
-    while (out_pNode)
+    Node<Type> *current = this->root;
+    while (current)
     {
-        if (comp(in_Value, out_pNode->value))
+        if (comp(in_Value, current->value))
         {
-            if (out_pNode->left)
-                out_pNode = out_pNode->left;
+            if (current->left)
+                current = current->left;
             else
             {
-                out_Dir = -1;
-                return;
+                return RedBlackTreeIterator<Type, Comp>(current, -1);
             }
         }
-        else if (comp(out_pNode->value, in_Value))
+        else if (comp(current->value, in_Value))
         {
-            if (out_pNode->right)
-                out_pNode = out_pNode->right;
+            if (current->right)
+                current = current->right;
             else
             {
-                out_Dir = 1;
-                return;
+                return RedBlackTreeIterator<Type, Comp>(current, 1);
             }
         }
         else
         {
-            out_Dir = 0;
-            return;
+            return RedBlackTreeIterator<Type, Comp>(current, 0);
         }
     }
+    return RedBlackTreeIterator<Type, Comp>();
 }
 
 /**
@@ -261,29 +273,29 @@ RedBlackTree<Type, Comp>::find ( Type         in_Value,
  */
 template <typename Type, typename Comp>
 bool
-RedBlackTree<Type, Comp>::insert(Type value, Type* &out_pFoundValue)
+RedBlackTree<Type, Comp>::insert(Type value,
+                                 RedBlackTreeIterator<Type, Comp> &out_Value)
 {
     Node<Type> *pNewNode = new Node<Type>(value);
-    Node<Type> *current;
-    int dir;
-    find(value, current, dir);
+    RedBlackTreeIterator<Type, Comp> it = find(value);
+    Node<Type> *current = it.getNode();
     if (!current)
     {
         this->root = pNewNode;
         this->root->red = false;
-        out_pFoundValue = &pNewNode->value;
+        out_Value = RedBlackTreeIterator<Type, Comp>(pNewNode, 0);
         return true;
     }
-    if (dir == 0)
+    if (it.getDir() == 0)
     {
         // tree already contains the value, quit now
         delete pNewNode;
-        out_pFoundValue = &current->value;
+        out_Value = RedBlackTreeIterator<Type, Comp>(current, 0);
         return false;
     }
-    out_pFoundValue = &pNewNode->value;
+    out_Value = RedBlackTreeIterator<Type, Comp>(pNewNode, 0);
     // current is an internal node of the tree
-    if (dir < 0)
+    if (it.getDir() < 0)
     {
         current->left = pNewNode;
     }
@@ -394,17 +406,21 @@ RedBlackTree<Type, Comp>::insert(Type value, Type* &out_pFoundValue)
 
 template <typename Type, typename Comp>
 bool
-RedBlackTree<Type, Comp>::remove(Type value, Type &out_foundValue)
+RedBlackTree<Type, Comp>::remove(Type value,
+                                 Type &out_Value)
 {
-    if (!this->root) return false;
-    Node<Type> *foundNode;
-    int dir;
-    find(value, foundNode, dir);
+    if (!this->root)
+    {
+        return false;
+    }
+    RedBlackTreeIterator<Type, Comp> it = find(value);
+    Node<Type> *foundNode = it.getNode();
     if (!foundNode) return false;
     // check if the find failed to find a matching node
-    if (dir != 0) return false;
+    if (it.getDir() != 0) return false;
     // swap foundNode with a child that itself has maximally one child
     Node<Type> *removeNode = foundNode;
+    out_Value = *it;
     // if foundNode has a left child, find the in-order predecessor
     // of foundNode
     if (foundNode->left)
@@ -569,23 +585,22 @@ RedBlackTree<Type, Comp>::clear()
     this->root = 0;
 };
 
-
 template <typename Type, typename Comp>
-RedBlackTreeIterator<Type>
+RedBlackTreeIterator<Type, Comp>
 RedBlackTree<Type, Comp>::begin()
 {
-    if (!this->root) return RedBlackTreeIterator<Type>(0);
+    if (!this->root) return RedBlackTreeIterator<Type, Comp>();
     Node<Type> *current = this->root;
     while (current->left)
         current = current->left;
-    return RedBlackTreeIterator<Type>(current);
+    return RedBlackTreeIterator<Type, Comp>(current, 0);
 }
 
 template <typename Type, typename Comp>
-RedBlackTreeIterator<Type>
+RedBlackTreeIterator<Type, Comp>
 RedBlackTree<Type, Comp>::end()
 {
-    return RedBlackTreeIterator<Type>(0);
+    return RedBlackTreeIterator<Type, Comp>();
 }
 
 #ifdef DEBUG

@@ -12,7 +12,7 @@ void printTreeValues(RedBlackTree<int> &t)
     cout << "values: ";
     for (RedBlackTreeIterator<int> i = t.begin(); i != t.end(); ++i)
     {
-        cout << (*i).value << " ";
+        cout << (*i) << " ";
     }
     cout << endl;
 }
@@ -32,7 +32,7 @@ int main ( int argc, char **argv )
     for (vector<int>::iterator it=myvector.begin(); it!=myvector.end(); ++it)
     {
         cout << "inserting " << (*it) << "..." << endl;
-        int foundVal;
+        RedBlackTreeIterator<int> foundVal;
         tree.insert(*it, foundVal);
         cout << "tree: " << tree.to_string() << endl;
         printTreeValues(tree);

@@ -1,7 +1,7 @@
 #ifndef _PYREDBLACK_H_
 #define _PYREDBLACK_H_
 
-#define DEBUG
+//#define DEBUG
 
 #include <Python.h>
 #include "redblack.h"
@@ -25,13 +25,13 @@ typedef Node<pyobjpairw> PairNode;
 
 struct pyobjpaircmp
 {
-    bool operator()(pyobjpairw &o1, pyobjpairw &o2)
+    bool operator()(const pyobjpairw &o1, const pyobjpairw &o2) const
     {
         return (PyObject_RichCompareBool(o1.first, o2.first, Py_LT) == 1);
     }
 };
 
-typedef RedBlackTreeIterator<pyobjpairw> PairRBTreeIterator;
+typedef RedBlackTreeIterator<pyobjpairw, pyobjpaircmp> PairRBTreeIterator;
 
 #ifdef DEBUG
 string
@@ -73,14 +73,12 @@ public:
 #ifdef DEBUG
         cout << "get_key begin " << to_string() << endl;
 #endif // DEBUG
-        PairNode* current;
-        int dir;
         pyobjpairw probe(key, Py_None);
-        find(probe, current, dir);
-        if (current && dir == 0)
+        PairRBTreeIterator it = find(probe);
+        if (it.valid() && it.getDir() == 0)
         {
             out_found = true;
-            return current->value.second;
+            return (*it).second;
         }
         out_found = false;
         return Py_None;
@@ -91,7 +89,7 @@ public:
         cout << "set_key begin " << to_string() << endl;
 #endif // DEBUG
         pyobjpairw probe(key, value);
-        pyobjpairw *found = 0;
+        PairRBTreeIterator found;
         if (insert(probe, found))
         {
             // storing a value
@@ -105,13 +103,13 @@ public:
         else
         {
 #ifdef DEBUG
-            cout << "found existing value " << pyobjrepr(found->second)
+            cout << "found existing value " << pyobjrepr((*found).second)
                  << " for key " << pyobjrepr(key) << endl;
 #endif // DEBUG
             // overwriting a value
-            Py_XDECREF(found->second);
-            found->second = value;
+            Py_XDECREF((*found).second);
             Py_XINCREF(value);
+            getNode(found)->value.second = value;
 #ifdef DEBUG
             cout << "set_key end " << to_string() << endl;
 #endif // DEBUG
@@ -122,8 +120,8 @@ public:
     {
         for (PairRBTreeIterator it = begin(); it != end(); ++it)
         {
-            Py_XDECREF((*it).value.first);
-            Py_XDECREF((*it).value.second);
+            Py_XDECREF((*it).first);
+            Py_XDECREF((*it).second);
         }
         clear();
     };
