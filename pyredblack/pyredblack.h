@@ -11,7 +11,7 @@ using namespace std;
 typedef Node<PyObject*> ObjectNode;
 struct pyobjcmp
 {
-    bool operator()(const PyObject* &o1, const PyObject* &o2) const
+    bool operator()(PyObject* &o1, PyObject* &o2) const
     {
         return (PyObject_RichCompareBool(o1, o2, Py_LT) == 1);
     }

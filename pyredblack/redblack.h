@@ -61,7 +61,7 @@ public:
     RedBlackTree();
     virtual ~RedBlackTree();
 
-    RedBlackTreeIterator<Type, Comp> find(const Type &in_Value) const;
+    RedBlackTreeIterator<Type, Comp> find(Type &in_Value) const;
     bool insert(Type value, RedBlackTreeIterator<Type, Comp> &out_Value);
     bool remove(Type value, Type &out_Value);
     void clear();
@@ -234,7 +234,7 @@ RedBlackTree<Type, Comp>::~RedBlackTree()
  */
 template <typename Type, typename Comp>
 RedBlackTreeIterator<Type, Comp>
-RedBlackTree<Type, Comp>::find ( const Type &in_Value ) const
+RedBlackTree<Type, Comp>::find ( Type &in_Value ) const
 {
     Node<Type> *current = this->root;
     while (current)
