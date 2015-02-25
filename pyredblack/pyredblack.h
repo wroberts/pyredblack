@@ -8,6 +8,60 @@
 #include <utility>
 using namespace std;
 
+typedef Node<PyObject*> ObjectNode;
+struct pyobjcmp
+{
+    bool operator()(const PyObject* &o1, const PyObject* &o2) const
+    {
+        return (PyObject_RichCompareBool(o1, o2, Py_LT) == 1);
+    }
+};
+typedef RedBlackTreeIterator<ObjectNode, pyobjcmp> ObjectRBTreeIterator;
+class ObjectRBTree : public RedBlackTree<ObjectNode, pyobjcmp>
+{
+public:
+    bool del_obj(PyObject *obj)
+    {
+        PyObject *found;
+        if (remove(obj, found))
+        {
+            Py_XDECREF(found);
+            return true;
+        }
+        return false;
+    };
+    bool add_obj(PyObject *obj)
+    {
+        ObjectRBTreeIterator found;
+        if (insert(obj, found))
+        {
+            Py_XINCREF(obj);
+            return true;
+        }
+        else return false;
+    };
+    void clear_objs()
+    {
+        for (ObjectRBTreeIterator it = begin(); it != end(); ++it)
+        {
+            Py_XDECREF(*it);
+        }
+        clear();
+    };
+    void pop_first_save_obj(PyObject* &obj)
+    {
+        ObjectRBTreeIterator it = begin();
+        if (!it.valid()) return false;
+        PyObject *found;
+        if (remove(it, found))
+        {
+            obj = found;
+            return true;
+        }
+        return false;
+    };
+};
+
 typedef pair<PyObject*,PyObject*> pyobjpair;
 
 // wrappers : (

@@ -19,6 +19,27 @@ from cython.operator import dereference, preincrement
 #        V second
 
 cdef extern from "pyredblack.h":
+    cdef cppclass ObjectRBTreeIterator:
+        ObjectRBTreeIterator() except +
+        ObjectRBTreeIterator& equals "operator="(const ObjectRBTreeIterator&)
+        ObjectRBTreeIterator& operator++()
+        PyObject* operator*() const
+        bool operator==(const ObjectRBTreeIterator&)
+        bool operator!=(const ObjectRBTreeIterator&)
+        int getDir()
+
+    cdef cppclass ObjectRBTree:
+        ObjectRBTree() except +
+        ObjectRBTreeIterator find(object obj)
+        #bool insert(pyobjpairw value)
+        #bool remove(pyobjpairw value)
+        bool del_obj(object obj)
+        bool add_obj(object obj)
+        bool pop_first_save_obj(object obj)
+        ObjectRBTreeIterator begin()
+        ObjectRBTreeIterator end()
+        void clear_objs()
+
     cdef cppclass pyobjpairw:
         pyobjpairw() except +
         pyobjpairw(object a, object b) except +
@@ -47,6 +68,222 @@ cdef extern from "pyredblack.h":
         PairRBTreeIterator begin()
         PairRBTreeIterator end()
         void clear_objs()
+
+cdef class rbset(object):
+    '''Red-black-tree-based set.'''
+
+    cdef ObjectRBTree *_tree
+    cdef int _num_nodes
+
+    def __cinit__(self, iterable = None):
+        '''Constructor.'''
+        self._tree = new ObjectRBTree()
+        self._num_nodes = 0
+        self.update(iterable)
+
+    def __dealloc__(self):
+        '''Destructor.'''
+        if self._tree is not NULL:
+            self._tree.clear_objs()
+            del self._tree
+
+    def __len__(self):
+        '''Return the number of items in the set.'''
+        return self._num_nodes
+
+    def __contains__(self, elem):
+        '''Return `True` if the set has a member `elem`, else `False`.'''
+        _hash = hash(key)
+        cdef ObjectRBTreeIterator it = self._tree.find(key)
+        if it.getDir() == 0:
+            return True
+        return False
+
+    def __iter__(self):
+        '''Return an iterator over the items in the set.'''
+        cdef ObjectRBTreeIterator it = self._tree.begin()
+        while it != self._tree.end():
+            yield <object>dereference(it)
+            preincrement(it)
+
+    def add(self, elem):
+        '''Add element `elem` to the set.'''
+        _hash = hash(elem)
+        if self._tree.add_obj(elem):
+            self._num_nodes += 1
+
+    def remove(self, elem):
+        '''
+        Remove element `elem` from the set. Raises `KeyError` if `elem` is
+        not contained in the set.
+        '''
+        _hash = hash(elem)
+        if self._tree.del_obj(elem):
+            self._num_nodes -= 1
+        else:
+            raise KeyError(elem)
+
+    def discard(self, elem):
+        '''Remove element `elem` from the set if it is present.'''
+        _hash = hash(elem)
+        if self._tree.del_obj(elem):
+            self._num_nodes -= 1
+
+    def pop(self):
+        '''
+        Remove and return an arbitrary element from the set. Raises
+        `KeyError` if the set is empty.
+        '''
+        cdef object obj = None
+        if self._tree.pop_first_save_obj(obj):
+            self._num_nodes -= 1
+            return obj
+        else:
+            raise KeyError('pop from an empty set')
+
+    def clear(self):
+        '''Remove all items from the set.'''
+        self._tree.clear_objs()
+        self._num_nodes = 0
+
+    def isdisjoint(self, other):
+        '''
+        Return True if the set has no elements in common with
+        `other`. Sets are disjoint if and only if their intersection
+        is the empty set.
+        '''
+        raise NotImplementedError
+
+    def __le__(self, other):
+        '''Test whether every element in the set is in `other`.'''
+        return self.issubset(other)
+
+    def issubset(self, other):
+        '''Test whether every element in the set is in `other`.'''
+        raise NotImplementedError
+
+    def __lt__(self, other):
+        '''
+        Test whether the set is a proper subset of `other`, that is, `set
+        <= other` and `set != other`.
+        '''
+        raise NotImplementedError
+
+    def issuperset(self, other):
+        '''Test whether every element in `other` is in the set.'''
+        return self.__ge__(rbset(other))
+
+    def __ge__(self, other):
+        '''Test whether every element in `other` is in the set.'''
+        raise NotImplementedError
+
+    def __gt__(self, other):
+        '''
+        Test whether the set is a proper superset of `other`, that is,
+        `set >= other` and `set != other`.
+        '''
+        raise NotImplementedError
+
+    def union(self, other, *others):
+        '''Return a new set with elements from the set and all others.'''
+        return self.__or__(rbset(other))
+
+    def __or__(self, other):
+        '''Return a new set with elements from the set and all others.'''
+        raise NotImplementedError
+
+    def intersection(self, other, *others):
+        '''
+        Return a new set with elements common to the set and all others.
+        '''
+        return self.__and__(rbset(other))
+
+    def __and__(self, other):
+        '''
+        Return a new set with elements common to the set and all others.
+        '''
+        raise NotImplementedError
+
+    def difference(self, other, *others):
+        '''
+        Return a new set with elements in the set that are not in the
+        others.
+        '''
+        return self.__sub__(rbset(other))
+
+    def __sub__(self, other):
+        '''
+        Return a new set with elements in the set that are not in the
+        others.
+        '''
+        raise NotImplementedError
+
+    def symmetric_difference(self, other):
+        '''
+        Return a new set with elements in either the set or `other` but
+        not both.
+        '''
+        return self.__xor__(rbset(other))
+
+    def __xor__(self, other):
+        '''
+        Return a new set with elements in either the set or `other` but
+        not both.
+        '''
+        raise NotImplementedError
+
+    def copy(self):
+        '''Return a new set with a shallow copy of the set.'''
+        return rbset(self)
+
+    def update(self, other, *others):
+        '''Update the set, adding elements from all others.'''
+        self.__ior__(rbset(other))
+        for other in others:
+            self.__ior__(rbset(other))
+
+    def __ior__(self, other):
+        '''Update the set, adding elements from all others.'''
+        raise NotImplementedError
+
+    def intersection_update(self, other, *others):
+        '''
+        Update the set, keeping only elements found in it and all others.
+        '''
+        self.__iand__(rbset(other))
+        for other in others:
+            self.__iand__(rbset(other))
+
+    def __iand__(self, other):
+        '''
+        Update the set, keeping only elements found in it and all others.
+        '''
+        raise NotImplementedError
+
+    def difference_update(self, other, *others):
+        '''Update the set, removing elements found in others.'''
+        self.__iand__(rbset(other))
+        for other in others:
+            self.__iand__(rbset(other))
+
+    def __isub__(self, other):
+        '''Update the set, removing elements found in others.'''
+        raise NotImplementedError
+
+    def symmetric_difference_update(other):
+        '''
+        Update the set, keeping only elements found in either set, but not
+        in both.
+        '''
+        self.__ixor__(rbset(other))
+
+    def __ixor__(self, other):
+        '''
+        Update the set, keeping only elements found in either set, but not
+        in both.
+        '''
+        raise NotImplementedError
+
 
 cdef class dict(object):
     '''Red-black-tree-based associative array.'''
