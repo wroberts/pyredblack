@@ -93,8 +93,8 @@ cdef class rbset(object):
 
     def __contains__(self, elem):
         '''Return `True` if the set has a member `elem`, else `False`.'''
-        _hash = hash(key)
-        cdef ObjectRBTreeIterator it = self._tree.find(key)
+        _hash = hash(elem)
+        cdef ObjectRBTreeIterator it = self._tree.find(elem)
         if it.getDir() == 0:
             return True
         return False
@@ -270,7 +270,7 @@ cdef class rbset(object):
         '''Update the set, removing elements found in others.'''
         raise NotImplementedError
 
-    def symmetric_difference_update(other):
+    def symmetric_difference_update(self, other):
         '''
         Update the set, keeping only elements found in either set, but not
         in both.
