@@ -60,17 +60,19 @@ cdef class dict(object):
         return self._num_nodes
 
     def __missing__(self, key):
-        raise KeyError(key)
-
         '''
         Called by `__getitem__()` to implement `self[key]` for dict
         subclasses when `key` is not in the dictionary.
         '''
+        _hash = hash(key)
+        raise KeyError(key)
+
     def __getitem__(self, key):
         '''
         Return the item of the dictionary with key `key`. Raises a
         `KeyError` if `key` is not in the map.
         '''
+        _hash = hash(key)
         cdef bool found = False
         value = self._tree.get_value_for_key(key, found)
         if not found:
@@ -79,6 +81,7 @@ cdef class dict(object):
 
     def __setitem__(self, key, value):
         '''Associates `key` with `value`.'''
+        _hash = hash(key)
         if self._tree.set_key(key, value):
             self._num_nodes += 1
 
@@ -87,6 +90,7 @@ cdef class dict(object):
         Removes `key` from the dictionary. Raises a `KeyError` if `key` is
         not in the map.
         '''
+        _hash = hash(key)
         if self._tree.del_key(key):
             self._num_nodes -= 1
         else:
@@ -94,6 +98,7 @@ cdef class dict(object):
 
     def __contains__(self, key):
         '''Return `True` if the dictionary has a key `key`, else `False`.'''
+        _hash = hash(key)
         cdef pyobjpairw probe
         probe = pyobjpairw(key, None)
         cdef PairRBTreeIterator it = self._tree.find(probe)
@@ -119,6 +124,7 @@ cdef class dict(object):
 
     def has_key(self, key):
         '''Test for the presence of `key` in the dictionary.'''
+        _hash = hash(key)
         return self.__contains__(key)
 
     def get(self, key, default=None):
@@ -127,6 +133,7 @@ cdef class dict(object):
         `default`. If `default` is not given, it defaults to None, so
         that this method never raises a `KeyError`.
         '''
+        _hash = hash(key)
         cdef bool found = False
         value = self._tree.get_value_for_key(key, found)
         if not found:
@@ -144,6 +151,7 @@ cdef class dict(object):
         `key` with a value of `default` and return
         `default`. `default` defaults to None.
         '''
+        _hash = hash(key)
         # TODO: this could be one tree access instead of two
         try:
             return self.__getitem__(key)
@@ -178,6 +186,7 @@ cdef class dict(object):
         If `key` is in the dictionary, remove it and return its value,
         else return `default`.
         '''
+        _hash = hash(key)
         cdef object value = default
         if self._tree.del_key_save_value(key, value):
             self._num_nodes -= 1
