@@ -1,3 +1,12 @@
+# -*- coding: utf-8 -*-
+
+'''
+redblack.pyx
+(c) Will Roberts  25 February, 2015
+
+Cython source to make red-black tree-based containers.
+'''
+
 from libcpp cimport bool
 from cpython.ref cimport PyObject
 from cython.operator import dereference, preincrement
