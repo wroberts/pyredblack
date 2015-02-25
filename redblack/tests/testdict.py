@@ -18,19 +18,19 @@ class TestDict(unittest.TestCase):
     def test_ctor_none(self):
         # dict(None) raises TypeError
         # redblack.dict does not
-        self.assertRaises(TypeError, redblack.dict, (None,))
+        self.assertRaises(TypeError, redblack.dict, None)
 
     def test_ctor1(self):
         # dict(2) raises TypeError
-        self.assertRaises(TypeError, redblack.dict, (2,))
+        self.assertRaises(TypeError, redblack.dict, 2)
 
     def test_ctor2(self):
         # dict([1,2,3]) raises TypeError
-        self.assertRaises(TypeError, redblack.dict, ([1,2,3],))
+        self.assertRaises(TypeError, redblack.dict, [1,2,3],)
 
     def test_ctor3(self):
         # dict('abc') raises ValueError
-        self.assertRaises(ValueError, redblack.dict, ('abc',))
+        self.assertRaises(ValueError, redblack.dict, 'abc')
 
     def test_ctor4(self):
         # dict([(1,2), (2,3), (3,3)]) raises no error
@@ -43,7 +43,7 @@ class TestDict(unittest.TestCase):
     def test_ctor5(self):
         # dict([(1,2,1), (2,3,2), (3,3,2)]) raises ValueError
         self.assertRaises(ValueError, redblack.dict,
-                          ([(1,2,1), (2,3,2), (3,3,2)],))
+                          [(1,2,1), (2,3,2), (3,3,2)])
 
     def test_ctor6(self):
         # dict(one=3,two=2,three=1) raises no error
@@ -70,8 +70,8 @@ class TestDict(unittest.TestCase):
 
     def test_missingkey(self):
         d = redblack.dict()
-        self.assertRaises(KeyError, d.__getitem__, (2,))
-        self.assertRaises(KeyError, d.__delitem__, (2,))
+        self.assertRaises(KeyError, d.__getitem__, 2,)
+        self.assertRaises(KeyError, d.__delitem__, 2,)
 
     def test_set(self):
         for _try in range(15):
