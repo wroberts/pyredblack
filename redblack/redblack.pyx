@@ -174,7 +174,7 @@ cdef class dict(object):
         raise NotImplementedError
 
     def copy(self):
-        raise NotImplementedError
+        return dict(self)
 
     def update(self):
         raise NotImplementedError
