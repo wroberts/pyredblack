@@ -120,3 +120,8 @@ class TestDict(unittest.TestCase):
         while d:
             items2.append(d.popitem())
         self.assertEqual(items, items2)
+
+    def test_hashable(self):
+        d = redblack.dict()
+        # dict[[1,2]] raises TypeError
+        self.assertRaises(TypeError, d.__setitem__, [1,2], 'stringval')
