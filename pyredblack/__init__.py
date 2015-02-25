@@ -8,4 +8,4 @@ __init__.py
 initialise redblack module.
 '''
 
-from .redblack import dict
+from .redblack import rbdict, rbset

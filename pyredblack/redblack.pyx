@@ -280,7 +280,7 @@ cdef class rbset(object):
         raise NotImplementedError
 
 
-cdef class dict(object):
+cdef class rbdict(object):
     '''Red-black-tree-based associative array.'''
 
     cdef PairRBTree *_tree
@@ -458,7 +458,7 @@ cdef class dict(object):
 
     def copy(self):
         '''Return a shallow copy of the dictionary.'''
-        return dict(self)
+        return rbdict(self)
 
     def update(self, mapping = None, **kwargs):
         '''
