@@ -176,6 +176,11 @@ cdef class rbset(object):
             raise NotImplementedError
         elif op == 1:
             # LE: Test whether every element in the set is in `other`.
+            otherhas = other.__contains__
+            for elem in self:
+                if not otherhas(elem):
+                    return False
+            return True
             raise NotImplementedError
         elif op == 4:
             # GT: Test whether the set is a proper superset of
