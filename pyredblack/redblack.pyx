@@ -181,6 +181,11 @@ cdef class rbset(object):
                 if not otherhas(elem):
                     return False
             return True
+        elif op == 2:
+            # EQ: Test for equality
+            raise NotImplementedError
+        elif op == 3:
+            # NEQ: Test for inequality
             raise NotImplementedError
         elif op == 4:
             # GT: Test whether the set is a proper superset of
