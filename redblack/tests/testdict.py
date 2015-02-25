@@ -78,7 +78,7 @@ class TestDict(unittest.TestCase):
             d1 = dict()
             d2 = redblack.dict()
             for _iter in range(5000):
-                num = random.randint(0, 10000)
+                num = random.randint(0, 1000)
                 key = 'big string key value {}'.format(num)
                 val = 'big string value value {}'.format(num)
                 d1[key] = val
@@ -92,8 +92,8 @@ class TestDict(unittest.TestCase):
         for _try in range(15):
             d1 = dict()
             d2 = redblack.dict()
-            for _iter in range(50000):
-                num = random.randint(0, 10000)
+            for _iter in range(5000):
+                num = random.randint(0, 1000)
                 key = 'big string key value {}'.format(num)
                 val = 'big string value value {}'.format(num)
                 op = random.randint(0,1)
