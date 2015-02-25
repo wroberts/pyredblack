@@ -47,33 +47,7 @@ cdef class dict(object):
         '''Constructor.'''
         self._tree = new PairRBTree()
         self._num_nodes = 0
-        if mapping is not None:
-            # try mapping as a dict first
-            items = None
-            try:
-                items = mapping.iteritems()
-            except AttributeError:
-                try:
-                    items = mapping.items()
-                except AttributeError:
-                    pass
-            if items:
-                for key, val in items:
-                    self[key] = val
-            else:
-                # raises TypeError if not iterable
-                for item in mapping:
-                    try:
-                        key, val = item
-                    except ValueError:
-                        raise ValueError('dictionary update sequence element '
-                                         'has length 1; 2 is required')
-                    except TypeError:
-                        raise TypeError('cannot convert dictionary update '
-                                        'sequence element to a sequence')
-                    self[key] = val
-        for key, val in kwargs.items():
-            self[key] = val
+        self.update(mapping, **kwargs)
 
     def __dealloc__(self):
         if self._tree is not NULL:
