@@ -13,7 +13,7 @@ from .. import redblack
 
 class TestDict(unittest.TestCase):
 
-     @unittest.expectedFailure
+    @unittest.expectedFailure
     def test_ctor_none(self):
         # dict(None) raises TypeError
         # redblack.dict does not
