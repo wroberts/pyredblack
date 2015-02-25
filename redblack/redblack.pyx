@@ -42,6 +42,7 @@ cdef extern from "pyredblack.h":
         bool del_key_save_value(object key, object value)
         object get_value_for_key(object key, bool &found)
         bool set_key(object key, object value)
+        bool pop_first_save_item(object key, object value)
         PairRBTreeIterator begin()
         PairRBTreeIterator end()
         void clear_objs()
@@ -206,7 +207,12 @@ cdef class dict(object):
         Remove and return an arbitrary `(key, value)` pair from the
         dictionary.
         '''
-        raise NotImplementedError
+        cdef object key = None
+        cdef object value = None
+        if self._tree.pop_first_save_item(key, value):
+            self._num_nodes -= 1
+            return (key, value)
+        raise KeyError('popitem(): dictionary is empty')
 
     def copy(self):
         '''Return a shallow copy of the dictionary.'''
