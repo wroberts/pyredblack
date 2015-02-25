@@ -188,7 +188,10 @@ cdef class rbset(object):
             raise NotImplementedError
         elif op == 5:
             # GE: Test whether every element in `other` is in the set.
-            raise NotImplementedError
+            for elem in other:
+                if not elem in self:
+                    return False
+            return True
         raise NotImplementedError
 
     def union(self, other, *others):
