@@ -48,7 +48,7 @@ public:
         }
         clear();
     };
-    void pop_first_save_obj(PyObject* &obj)
+    bool pop_first_save_obj(PyObject* &obj)
     {
         ObjectRBTreeIterator it = begin();
         if (!it.valid()) return false;
