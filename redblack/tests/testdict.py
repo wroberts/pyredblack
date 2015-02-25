@@ -107,3 +107,16 @@ class TestDict(unittest.TestCase):
             self.assertEqual(sorted(d1.keys()), sorted(d2.keys()))
             self.assertEqual(sorted(d1.values()), sorted(d2.values()))
             self.assertEqual(sorted(d1.items()), sorted(d2.items()))
+
+    def test_popitem(self):
+        d = redblack.dict()
+        for _iter in range(5000):
+            num = random.randint(0, 1000)
+            key = 'big string key value {}'.format(num)
+            val = 'big string value value {}'.format(num)
+            d[key] = val
+        items = list(d.items())
+        items2 = []
+        while d:
+            items2.append(d.popitem())
+        self.assertEqual(items, items2)
