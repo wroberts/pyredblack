@@ -170,6 +170,8 @@ cdef class rbset(object):
         return self.__richcmp__(rbset(other), 5)
 
     def __richcmp__(self, other, op):
+        if not isinstance(other, (set, frozenset, rbset)):
+            return False
         if op == 0:
             # LT: Test whether the set is a proper subset of `other`,
             # that is, `set <= other` and `set != other`.
