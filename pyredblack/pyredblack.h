@@ -16,8 +16,8 @@ struct pyobjcmp
         return (PyObject_RichCompareBool(o1, o2, Py_LT) == 1);
     }
 };
-typedef RedBlackTreeIterator<ObjectNode, pyobjcmp> ObjectRBTreeIterator;
-class ObjectRBTree : public RedBlackTree<ObjectNode, pyobjcmp>
+typedef RedBlackTreeIterator<PyObject*, pyobjcmp> ObjectRBTreeIterator;
+class ObjectRBTree : public RedBlackTree<PyObject*, pyobjcmp>
 {
 public:
     bool del_obj(PyObject *obj)
