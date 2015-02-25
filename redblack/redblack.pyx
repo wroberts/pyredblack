@@ -30,6 +30,7 @@ cdef extern from "pyredblack.h":
         #bool insert(pyobjpairw value)
         #bool remove(pyobjpairw value)
         bool del_key(object key)
+        bool del_key_save_value(object key, object value)
         object get_value_for_key(object key, bool &found)
         bool set_key(object key, object value)
         PairRBTreeIterator begin()
@@ -136,8 +137,11 @@ cdef class dict(object):
                    <object>dereference(it).getSecond())
             preincrement(it)
 
-    def pop(self):
-        raise NotImplementedError
+    def pop(self, key, default=None):
+        cdef object value = default
+        if self._tree.del_key_save_value(key, value):
+            self._num_nodes -= 1
+        return value
 
     def popitem(self):
         raise NotImplementedError

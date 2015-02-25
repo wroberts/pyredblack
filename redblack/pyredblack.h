@@ -47,6 +47,18 @@ pyobjrepr(PyObject *o)
 class PairRBTree : public RedBlackTree<pyobjpairw, pyobjpaircmp>
 {
 public:
+    bool del_key_save_value(PyObject *key, PyObject* &value)
+    {
+        pyobjpairw probe(key, Py_None);
+        pyobjpairw found;
+        if (remove(probe, found))
+        {
+            Py_XDECREF(found.first);
+            value = found.second;
+            return true;
+        }
+        return false;
+    }
     bool del_key(PyObject *key)
     {
 #ifdef DEBUG
