@@ -242,7 +242,7 @@ cdef class dict(object):
                         key, val = item
                     except ValueError:
                         raise ValueError('dictionary update sequence element '
-                                         'has length 1; 2 is required')
+                                         'must have length 2')
                     except TypeError:
                         raise TypeError('cannot convert dictionary update '
                                         'sequence element to a sequence')
