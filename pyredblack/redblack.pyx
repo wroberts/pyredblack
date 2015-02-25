@@ -154,34 +154,29 @@ cdef class rbset(object):
         '''
         raise NotImplementedError
 
-    def __le__(self, other):
-        '''Test whether every element in the set is in `other`.'''
-        return self.issubset(other)
-
     def issubset(self, other):
         '''Test whether every element in the set is in `other`.'''
-        raise NotImplementedError
-
-    def __lt__(self, other):
-        '''
-        Test whether the set is a proper subset of `other`, that is, `set
-        <= other` and `set != other`.
-        '''
-        raise NotImplementedError
+        return self.__richcmp__(rbset(other), 1)
 
     def issuperset(self, other):
         '''Test whether every element in `other` is in the set.'''
-        return self.__ge__(rbset(other))
+        return self.__richcmp__(rbset(other), 5)
 
-    def __ge__(self, other):
-        '''Test whether every element in `other` is in the set.'''
-        raise NotImplementedError
-
-    def __gt__(self, other):
-        '''
-        Test whether the set is a proper superset of `other`, that is,
-        `set >= other` and `set != other`.
-        '''
+    def __richcmp__(self, other, op):
+        if op == 0:
+            # LT: Test whether the set is a proper subset of `other`,
+            # that is, `set <= other` and `set != other`.
+            raise NotImplementedError
+        elif op == 1:
+            # LE: Test whether every element in the set is in `other`.
+            raise NotImplementedError
+        elif op == 4:
+            # GT: Test whether the set is a proper superset of
+            # `other`, that is, `set >= other` and `set != other`.
+            raise NotImplementedError
+        elif op == 5:
+            # GE: Test whether every element in `other` is in the set.
+            raise NotImplementedError
         raise NotImplementedError
 
     def union(self, other, *others):
