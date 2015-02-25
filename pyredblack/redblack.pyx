@@ -7,6 +7,7 @@ redblack.pyx
 Cython source to make red-black tree-based containers.
 '''
 
+include "config.pxi"
 from libcpp cimport bool
 from cpython.ref cimport PyObject
 from cython.operator import dereference, preincrement
@@ -122,15 +123,24 @@ cdef class dict(object):
 
     def keys(self):
         '''Return a copy of the dictionary’s list of keys.'''
-        return list(self.iterkeys())
+        IF PYTHON_VERSION2 == 1:
+            return list(self.iterkeys())
+        ELSE:
+            return self.iterkeys()
 
     def values(self):
         '''Return a copy of the dictionary’s list of values.'''
-        return list(self.itervalues())
+        IF PYTHON_VERSION2 == 1:
+            return list(self.itervalues())
+        ELSE:
+            return self.itervalues()
 
     def items(self):
         '''Return a copy of the dictionary’s list of `(key, value)` pairs.'''
-        return list(self.iteritems())
+        IF PYTHON_VERSION2 == 1:
+            return list(self.iteritems())
+        ELSE:
+            return self.iteritems()
 
     def has_key(self, key):
         '''Test for the presence of `key` in the dictionary.'''

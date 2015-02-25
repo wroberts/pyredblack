@@ -2,12 +2,16 @@ from setuptools import setup, find_packages  # Always prefer setuptools over dis
 from codecs import open  # To use a consistent encoding
 from os import path
 from Cython.Build import cythonize
+import sys
 
 HERE = path.abspath(path.dirname(__file__))
 
 # Get the long description from the relevant file
 with open(path.join(HERE, 'README.rst'), encoding='utf-8') as f:
     LONG_DESCRIPTION = f.read()
+
+with open(path.join(HERE, 'pyredblack', 'config.pxi'), 'w') as f:
+    f.write('DEF PYTHON_VERSION2 = {}\n'.format(int(sys.version_info[0] == 2)))
 
 setup(
     name='pyredblack',
