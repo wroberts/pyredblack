@@ -1,4 +1,5 @@
 *.o
+*.pyc
 *~
 /build/
 /redblack.so
