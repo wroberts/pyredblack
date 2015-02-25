@@ -50,17 +50,27 @@ cdef class dict(object):
         self.update(mapping, **kwargs)
 
     def __dealloc__(self):
+        '''Destructor.'''
         if self._tree is not NULL:
             self._tree.clear_objs()
             del self._tree
 
     def __len__(self):
+        '''Return the number of items in the dictionary.'''
         return self._num_nodes
 
     def __missing__(self, key):
         raise KeyError(key)
 
+        '''
+        Called by `__getitem__()` to implement `self[key]` for dict
+        subclasses when `key` is not in the dictionary.
+        '''
     def __getitem__(self, key):
+        '''
+        Return the item of the dictionary with key `key`. Raises a
+        `KeyError` if `key` is not in the map.
+        '''
         cdef bool found = False
         value = self._tree.get_value_for_key(key, found)
         if not found:
@@ -68,16 +78,22 @@ cdef class dict(object):
         return value
 
     def __setitem__(self, key, value):
+        '''Associates `key` with `value`.'''
         if self._tree.set_key(key, value):
             self._num_nodes += 1
 
     def __delitem__(self, key):
+        '''
+        Removes `key` from the dictionary. Raises a `KeyError` if `key` is
+        not in the map.
+        '''
         if self._tree.del_key(key):
             self._num_nodes -= 1
         else:
             raise KeyError(key)
 
     def __contains__(self, key):
+        '''Return `True` if the dictionary has a key `key`, else `False`.'''
         cdef pyobjpairw probe
         probe = pyobjpairw(key, None)
         cdef PairRBTreeIterator it = self._tree.find(probe)
@@ -86,21 +102,31 @@ cdef class dict(object):
         return False
 
     def __iter__(self):
+        '''Return an iterator over the keys of the dictionary.'''
         return self.iterkeys()
 
     def keys(self):
+        '''Return a copy of the dictionary’s list of keys.'''
         return list(self.iterkeys())
 
     def values(self):
+        '''Return a copy of the dictionary’s list of values.'''
         return list(self.itervalues())
 
     def items(self):
+        '''Return a copy of the dictionary’s list of `(key, value)` pairs.'''
         return list(self.iteritems())
 
     def has_key(self, key):
+        '''Test for the presence of `key` in the dictionary.'''
         return self.__contains__(key)
 
     def get(self, key, default=None):
+        '''
+        Return the value for `key` if `key` is in the dictionary, else
+        `default`. If `default` is not given, it defaults to None, so
+        that this method never raises a `KeyError`.
+        '''
         cdef bool found = False
         value = self._tree.get_value_for_key(key, found)
         if not found:
@@ -108,10 +134,16 @@ cdef class dict(object):
         return value
 
     def clear(self):
+        '''Remove all items from the dictionary.'''
         self._tree.clear_objs()
         self._num_nodes = 0
 
     def setdefault(self, key, default = None):
+        '''
+        If `key` is in the dictionary, return its value. If not, insert
+        `key` with a value of `default` and return
+        `default`. `default` defaults to None.
+        '''
         # TODO: this could be one tree access instead of two
         try:
             return self.__getitem__(key)
@@ -120,18 +152,21 @@ cdef class dict(object):
             return default
 
     def iterkeys(self):
+        '''Return an iterator over the dictionary’s keys.'''
         cdef PairRBTreeIterator it = self._tree.begin()
         while it != self._tree.end():
             yield <object>dereference(it).getFirst()
             preincrement(it)
 
     def itervalues(self):
+        '''Return an iterator over the dictionary’s values.'''
         cdef PairRBTreeIterator it = self._tree.begin()
         while it != self._tree.end():
             yield <object>dereference(it).getSecond()
             preincrement(it)
 
     def iteritems(self):
+        '''Return an iterator over the dictionary’s `(key, value)` pairs.'''
         cdef PairRBTreeIterator it = self._tree.begin()
         while it != self._tree.end():
             yield (<object>dereference(it).getFirst(),
@@ -139,18 +174,36 @@ cdef class dict(object):
             preincrement(it)
 
     def pop(self, key, default=None):
+        '''
+        If `key` is in the dictionary, remove it and return its value,
+        else return `default`.
+        '''
         cdef object value = default
         if self._tree.del_key_save_value(key, value):
             self._num_nodes -= 1
         return value
 
     def popitem(self):
+        '''
+        Remove and return an arbitrary `(key, value)` pair from the
+        dictionary.
+        '''
         raise NotImplementedError
 
     def copy(self):
+        '''Return a shallow copy of the dictionary.'''
         return dict(self)
 
     def update(self, mapping = None, **kwargs):
+        '''
+        Update the dictionary with the key/value pairs from `mapping`
+        and/or `kwargs`, overwriting existing keys.
+
+        `update()` accepts either another dictionary object or an
+        iterable of key/value pairs (as tuples or other iterables of
+        length two). If keyword arguments are specified, the
+        dictionary is then updated with those key/value pairs.
+        '''
         if mapping is not None:
             # try mapping as a dict first
             items = None
