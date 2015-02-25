@@ -137,6 +137,19 @@ public:
         }
         clear();
     };
+    bool pop_first_save_item(PyObject* &key, PyObject* &value)
+    {
+        PairRBTreeIterator it = begin();
+        if (!it.valid()) return false;
+        pyobjpairw found;
+        if (remove(it, found))
+        {
+            key = found.first;
+            value = found.second;
+            return true;
+        }
+        return false;
+    };
 };
 
 #ifdef DEBUG
