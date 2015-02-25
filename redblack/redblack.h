@@ -75,6 +75,7 @@ public:
 protected:
     Node<Type>* getNode(RedBlackTreeIterator<Type, Comp> &it) const
     {return it.getNode();};
+    bool remove(RedBlackTreeIterator<Type, Comp> &it, Type &out_Value);
 
 private:
 #ifdef DEBUG
@@ -409,11 +410,45 @@ bool
 RedBlackTree<Type, Comp>::remove(Type value,
                                  Type &out_Value)
 {
+    RedBlackTreeIterator<Type, Comp> it = find(value);
+    return remove(it, out_Value);
+}
+
+template <typename Type, typename Comp>
+void
+RedBlackTree<Type, Comp>::clear()
+{
+    if (this->root) delete this->root;
+    this->root = 0;
+};
+
+template <typename Type, typename Comp>
+RedBlackTreeIterator<Type, Comp>
+RedBlackTree<Type, Comp>::begin()
+{
+    if (!this->root) return RedBlackTreeIterator<Type, Comp>();
+    Node<Type> *current = this->root;
+    while (current->left)
+        current = current->left;
+    return RedBlackTreeIterator<Type, Comp>(current, 0);
+}
+
+template <typename Type, typename Comp>
+RedBlackTreeIterator<Type, Comp>
+RedBlackTree<Type, Comp>::end()
+{
+    return RedBlackTreeIterator<Type, Comp>();
+}
+
+template <typename Type, typename Comp>
+bool
+RedBlackTree<Type, Comp>::remove(RedBlackTreeIterator<Type, Comp> &it,
+                                 Type &out_Value)
+{
     if (!this->root)
     {
         return false;
     }
-    RedBlackTreeIterator<Type, Comp> it = find(value);
     Node<Type> *foundNode = it.getNode();
     if (!foundNode) return false;
     // check if the find failed to find a matching node
@@ -575,32 +610,6 @@ RedBlackTree<Type, Comp>::remove(Type value,
         cout << "ERROR: remove uncaught case" << endl;
         assert(0);
     }
-}
-
-template <typename Type, typename Comp>
-void
-RedBlackTree<Type, Comp>::clear()
-{
-    if (this->root) delete this->root;
-    this->root = 0;
-};
-
-template <typename Type, typename Comp>
-RedBlackTreeIterator<Type, Comp>
-RedBlackTree<Type, Comp>::begin()
-{
-    if (!this->root) return RedBlackTreeIterator<Type, Comp>();
-    Node<Type> *current = this->root;
-    while (current->left)
-        current = current->left;
-    return RedBlackTreeIterator<Type, Comp>(current, 0);
-}
-
-template <typename Type, typename Comp>
-RedBlackTreeIterator<Type, Comp>
-RedBlackTree<Type, Comp>::end()
-{
-    return RedBlackTreeIterator<Type, Comp>();
 }
 
 #ifdef DEBUG
