@@ -64,7 +64,7 @@ setup(
     packages=find_packages(exclude=['contrib', 'docs', 'tests*']),
 
     ext_modules = cythonize(
-        'redblack/redblack.pyx',    # our Cython source
+        'pyredblack/redblack.pyx',  # our Cython source
         #sources=['Rectangle.cpp'], # additional source file(s)
         language="c++",             # generate C++ code
     ),
