@@ -206,11 +206,15 @@ cdef class rbset(object):
 
     def union(self, other, *others):
         '''Return a new set with elements from the set and all others.'''
-        return self.__or__(rbset(other))
+        rv = rbset(self)
+        rv.update(other, others)
+        return rv
 
     def __or__(self, other):
         '''Return a new set with elements from the set and all others.'''
-        raise NotImplementedError
+        if not isinstance(other, (set, frozenset, rbset)):
+            raise TypeError('unsupported operand type(s) for |')
+        return rbset(self, other)
 
     def intersection(self, other, *others):
         '''
@@ -222,7 +226,9 @@ cdef class rbset(object):
         '''
         Return a new set with elements common to the set and all others.
         '''
-        raise NotImplementedError
+        if not isinstance(other, (set, frozenset, rbset)):
+            raise TypeError('unsupported operand type(s) for &')
+        return rbset(elem for elem in self if elem in other)
 
     def difference(self, other, *others):
         '''
@@ -236,7 +242,9 @@ cdef class rbset(object):
         Return a new set with elements in the set that are not in the
         others.
         '''
-        raise NotImplementedError
+        if not isinstance(other, (set, frozenset, rbset)):
+            raise TypeError('unsupported operand type(s) for -')
+        return rbset(elem for elem in self if elem not in other)
 
     def symmetric_difference(self, other):
         '''
@@ -250,6 +258,8 @@ cdef class rbset(object):
         Return a new set with elements in either the set or `other` but
         not both.
         '''
+        if not isinstance(other, (set, frozenset, rbset)):
+            raise TypeError('unsupported operand type(s) for ^')
         raise NotImplementedError
 
     def copy(self):
@@ -258,13 +268,18 @@ cdef class rbset(object):
 
     def update(self, other, *others):
         '''Update the set, adding elements from all others.'''
-        self.__ior__(rbset(other))
+        for elem in other:
+            self.add(elem)
         for other in others:
-            self.__ior__(rbset(other))
+            for elem in other:
+                self.add(elem)
 
     def __ior__(self, other):
         '''Update the set, adding elements from all others.'''
-        raise NotImplementedError
+        if not isinstance(other, (set, frozenset, rbset)):
+            raise TypeError('unsupported operand type(s) for |=')
+        for elem in other:
+            self.add(elem)
 
     def intersection_update(self, other, *others):
         '''
@@ -278,6 +293,8 @@ cdef class rbset(object):
         '''
         Update the set, keeping only elements found in it and all others.
         '''
+        if not isinstance(other, (set, frozenset, rbset)):
+            raise TypeError('unsupported operand type(s) for &=')
         raise NotImplementedError
 
     def difference_update(self, other, *others):
@@ -288,6 +305,8 @@ cdef class rbset(object):
 
     def __isub__(self, other):
         '''Update the set, removing elements found in others.'''
+        if not isinstance(other, (set, frozenset, rbset)):
+            raise TypeError('unsupported operand type(s) for -=')
         raise NotImplementedError
 
     def symmetric_difference_update(self, other):
@@ -302,6 +321,8 @@ cdef class rbset(object):
         Update the set, keeping only elements found in either set, but not
         in both.
         '''
+        if not isinstance(other, (set, frozenset, rbset)):
+            raise TypeError('unsupported operand type(s) for ^=')
         raise NotImplementedError
 
 
