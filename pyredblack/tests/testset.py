@@ -126,4 +126,8 @@ class TestSet(unittest.TestCase):
         self.run_algebra('__xor__')
 
     def run_algebra(self, op):
-        raise NotImplementedError
+        for _try in range(10):
+            a, b = make_random_setpair()
+            rv1 = getattr(a, op)(b)
+            rv2 = getattr(redblack.rbset(a), op)(redblack.rbset(b))
+            self.assertEqual(sorted(rv1), sorted(rv2))
