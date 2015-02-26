@@ -7,6 +7,6 @@ python:
 before_install:
   - "pip install cython"
 # command to install dependencies
-install: "pip install ."
+install: "python setup.py build_ext --inplace"
 # command to run tests
 script: nosetests
