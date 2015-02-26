@@ -126,4 +126,4 @@ class TestSet(unittest.TestCase):
         self.run_algebra('__xor__')
 
     def run_algebra(self, op):
-        pass # NYI
+        raise NotImplementedError
