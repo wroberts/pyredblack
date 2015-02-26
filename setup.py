@@ -25,7 +25,7 @@ setup(
     long_description=LONG_DESCRIPTION,
 
     # The project's main homepage.
-    url='https://github.com/pypa/sampleproject',
+    url='https://github.com/wroberts/pyredblack',
 
     # Author details
     author='Will Roberts',
@@ -65,11 +65,10 @@ setup(
 
     # You can just specify the packages manually here if your project is
     # simple. Or you can use find_packages().
-    packages=find_packages(exclude=['contrib', 'docs', 'tests*']),
+    packages=find_packages(exclude=['testcpp']),
 
     ext_modules = cythonize(
         'pyredblack/redblack.pyx',  # our Cython source
-        #sources=['Rectangle.cpp'], # additional source file(s)
         language="c++",             # generate C++ code
     ),
 
