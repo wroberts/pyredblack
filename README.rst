@@ -1,6 +1,6 @@
-==========
- redblack
-==========
+============
+ pyredblack
+============
 
 Cython interface to red-black trees implemented in C++.
 
