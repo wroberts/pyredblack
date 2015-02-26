@@ -17,10 +17,10 @@ and see animations of insertion, lookup, and deletion `here
 
 This package provides dictionary and set objects based on
 red-black-trees; these can be used as drop-in replacements for the
-built-in `dict` and `set` types, except that they maintain their
+built-in ``dict`` and ``set`` types, except that they maintain their
 contents in sorted order.
 
-Dictionary (`rbdict`)::
+Dictionary (``rbdict``)::
 
     >>> import pyredblack
     >>> d = pyredblack.rbdict(Germany = 'Berlin',
@@ -50,7 +50,7 @@ Dictionary (`rbdict`)::
     >>> d.popitem()
     ('Germany', 'Berlin')
 
-Set (`rbset`)::
+Set (``rbset``)::
 
     >>> fruit = pyredblack.rbset(['apple', 'orange', 'apple', 'pear',
                                   'orange', 'banana'])
