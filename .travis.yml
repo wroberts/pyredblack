@@ -4,7 +4,9 @@ python:
   - "3.2"
   - "3.3"
   - "3.4"
-before_install: "cython --cplus pyredblack/redblack.pyx"
+before_install:
+  - "pip install cython"
+  - "cython --cplus pyredblack/redblack.pyx"
 # command to install dependencies
 install: "pip install ."
 # command to run tests
