@@ -168,13 +168,13 @@ cdef class rbset(object):
         '''Test whether every element in the set is in `other`.'''
         if not isinstance(other, (set, frozenset, rbset)):
             other = rbset(other)
-        return self.__richcmp__(other, 1)
+        return self.__le__(other)
 
     def issuperset(self, other):
         '''Test whether every element in `other` is in the set.'''
         if not isinstance(other, (set, frozenset, rbset)):
             other = rbset(other)
-        return self.__richcmp__(other, 5)
+        return self.__ge__(other)
 
     def __richcmp__(self, other, op):
         if not isinstance(other, (set, frozenset, rbset)):
@@ -207,7 +207,7 @@ cdef class rbset(object):
             return True
         elif op == 3:
             # NEQ: Test for inequality
-            return not self.__richcmp(other, 2)
+            return not self.__eq__(other)
         elif op == 4:
             # GT: Test whether the set is a proper superset of
             # `other`, that is, `set >= other` and `set != other`.
