@@ -2,6 +2,7 @@
 *.pyc
 *~
 /build/
+/pyredblack.egg-info/
 /pyredblack/config.pxi
 /pyredblack/redblack.cpp
 /pyredblack/redblack.so
