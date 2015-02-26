@@ -139,6 +139,7 @@ RedBlackTreeIterator<Type, Comp>&
 RedBlackTreeIterator<Type, Comp>::operator=(const RedBlackTreeIterator<Type, Comp> &i)
 {
     this->current = i.current;
+    this->dir = i.dir;
     return *this;
 }
 
