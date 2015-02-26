@@ -26,6 +26,7 @@ cdef extern from "pyredblack.h":
         PyObject* operator*() const
         bool operator==(const ObjectRBTreeIterator&)
         bool operator!=(const ObjectRBTreeIterator&)
+        bool valid()
         int getDir()
 
     cdef cppclass ObjectRBTree:
@@ -53,6 +54,7 @@ cdef extern from "pyredblack.h":
         pyobjpairw& operator*() const
         bool operator==(const PairRBTreeIterator&)
         bool operator!=(const PairRBTreeIterator&)
+        bool valid()
         int getDir()
 
     cdef cppclass PairRBTree:
@@ -98,7 +100,7 @@ cdef class rbset(object):
         '''Return `True` if the set has a member `elem`, else `False`.'''
         _hash = hash(elem)
         cdef ObjectRBTreeIterator it = self._tree.find(elem)
-        if it.getDir() == 0:
+        if it.valid() and it.getDir() == 0:
             return True
         return False
 
@@ -431,7 +433,7 @@ cdef class rbdict(object):
         cdef pyobjpairw probe
         probe = pyobjpairw(key, None)
         cdef PairRBTreeIterator it = self._tree.find(probe)
-        if it.getDir() == 0:
+        if it.valid() and it.getDir() == 0:
             return True
         return False
 
