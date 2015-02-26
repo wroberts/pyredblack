@@ -1,7 +1,6 @@
-from setuptools import setup, find_packages  # Always prefer setuptools over distutils
+from setuptools import setup, find_packages, Extension
 from codecs import open  # To use a consistent encoding
 from os import path
-from Cython.Build import cythonize
 import sys
 
 HERE = path.abspath(path.dirname(__file__))
@@ -15,6 +14,23 @@ with open(path.join(HERE, 'README.rst'), encoding='utf-8') as f:
 
 with open(path.join(HERE, 'pyredblack', 'config.pxi'), 'w') as f:
     f.write('DEF PYTHON_VERSION2 = {}\n'.format(int(sys.version_info[0] == 2)))
+
+# hack in our own command line argument
+USE_CYTHON = False
+if '--with-cython' in sys.argv:
+    sys.argv.remove('--with-cython')
+    USE_CYTHON = True
+
+PYREDBLACK_EXTENSIONS = [Extension(
+    "pyredblack/redblack",
+    ['pyredblack/redblack' + ('.pyx' if USE_CYTHON else '.cpp'),
+     'pyredblack/config.pxi',
+     'pyredblack/pyredblack.h',
+     'pyredblack/redblack.h'],
+    language="c++")]
+if USE_CYTHON:
+    from Cython.Build import cythonize
+    PYREDBLACK_EXTENSIONS = cythonize(PYREDBLACK_EXTENSIONS)
 
 setup(
     name='pyredblack',
@@ -70,10 +86,7 @@ setup(
     # simple. Or you can use find_packages().
     packages=find_packages(exclude=['testcpp']),
 
-    ext_modules = cythonize(
-        'pyredblack/redblack.pyx',  # our Cython source
-        language="c++",             # generate C++ code
-    ),
+    ext_modules = PYREDBLACK_EXTENSIONS,
 
     # List run-time dependencies here.  These will be installed by pip when your
     # project is installed. For an analysis of "install_requires" vs pip's
