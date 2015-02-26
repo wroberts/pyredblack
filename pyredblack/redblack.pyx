@@ -184,12 +184,17 @@ cdef class rbset(object):
         if op == 0:
             # LT: Test whether the set is a proper subset of `other`,
             # that is, `set <= other` and `set != other`.
-            raise NotImplementedError
+            for elem in self:
+                if not elem in other:
+                    return False
+            for elem in other:
+                if elem not in self:
+                    return True
+            return False
         elif op == 1:
             # LE: Test whether every element in the set is in `other`.
-            otherhas = other.__contains__
             for elem in self:
-                if not otherhas(elem):
+                if not elem in other:
                     return False
             return True
         elif op == 2:
@@ -213,7 +218,13 @@ cdef class rbset(object):
         elif op == 4:
             # GT: Test whether the set is a proper superset of
             # `other`, that is, `set >= other` and `set != other`.
-            raise NotImplementedError
+            for elem in other:
+                if not elem in self:
+                    return False
+            for elem in self:
+                if elem not in other:
+                    return True
+            return False
         elif op == 5:
             # GE: Test whether every element in `other` is in the set.
             for elem in other:
