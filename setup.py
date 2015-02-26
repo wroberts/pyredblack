@@ -23,10 +23,7 @@ if '--with-cython' in sys.argv:
 
 PYREDBLACK_EXTENSIONS = [Extension(
     "pyredblack/redblack",
-    ['pyredblack/redblack' + ('.pyx' if USE_CYTHON else '.cpp'),
-     'pyredblack/config.pxi',
-     'pyredblack/pyredblack.h',
-     'pyredblack/redblack.h'],
+    ['pyredblack/redblack' + ('.pyx' if USE_CYTHON else '.cpp')],
     language="c++")]
 if USE_CYTHON:
     from Cython.Build import cythonize

@@ -1,3 +1,6 @@
 include LICENSE.rst
 include README.rst
 include pyredblack/VERSION
+include pyredblack/prbconfig.h
+include pyredblack/pyredblack.h
+include pyredblack/redblack.h
