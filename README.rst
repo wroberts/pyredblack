@@ -2,6 +2,10 @@
  pyredblack
 ============
 
+Copyright (c) 2015 Will Roberts <wildwilhelm@gmail.com>
+
+Licensed under the MIT License (see ``LICENSE.rst`` for details).
+
 Cython interface to red-black trees implemented in C++.
 
 `Red-black trees`_ are a kind of `self-balancing binary tree`_.  They
