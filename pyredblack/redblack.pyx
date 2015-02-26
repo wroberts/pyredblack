@@ -155,12 +155,12 @@ cdef class rbset(object):
         `other`. Sets are disjoint if and only if their intersection
         is the empty set.
         '''
-        try:
-            otherhas = other.__contains__
-        except AttributeError:
-            otherhas = rbset(other).__contains__
-        for elem in self:
-            if otherhas(elem):
+        if not isinstance(other, (set, frozenset, rbset)):
+            other = rbset(other)
+        (_d, smaller), (_d, bigger) = sorted([(len(self), self),
+                                              (len(other), other)])
+        for elem in smaller:
+            if elem in bigger:
                 return False
         return True
 
@@ -246,7 +246,9 @@ cdef class rbset(object):
         '''
         if not isinstance(other, (set, frozenset, rbset)):
             raise TypeError('unsupported operand type(s) for &')
-        return rbset(elem for elem in self if elem in other)
+        (_d, smaller), (_d, bigger) = sorted([(len(self), self),
+                                              (len(other), other)])
+        return rbset(elem for elem in smaller if elem in bigger)
 
     def difference(self, other, *others):
         '''
