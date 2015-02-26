@@ -125,3 +125,20 @@ class TestDict(unittest.TestCase):
         d = redblack.rbdict()
         # dict[[1,2]] raises TypeError
         self.assertRaises(TypeError, d.__setitem__, [1,2], 'stringval')
+
+    def test_popitem(self):
+        d = redblack.rbdict(Germany = 'Berlin',
+                            Hungary = 'Budapest',
+                            Ireland = 'Dublin',
+                            Portugal = 'Lisbon',
+                            Cyprus = 'Nicosia',
+                            Greenland = 'Nuuk',
+                            Iceland = 'Reykjavik',
+                            Macedonia = 'Skopje',
+                            Bulgaria = 'Sofia',
+                            Sweden = 'Stockholm')
+        for _try in range(5):
+            self.assertEqual(d['Ireland'], 'Dublin')
+        (k, v) = d.popitem()
+        self.assertEqual(k, 'Bulgaria')
+        self.assertEqual(v, 'Sofia')
