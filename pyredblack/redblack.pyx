@@ -192,7 +192,19 @@ cdef class rbset(object):
             return True
         elif op == 2:
             # EQ: Test for equality
-            raise NotImplementedError
+            if len(self) != len(other):
+                return False
+            it1 = iter(self)
+            it2 = iter(other)
+            while True:
+                try:
+                    elem1 = next(it1)
+                    elem2 = next(it2)
+                    if elem1 != elem2:
+                        return False
+                except StopIteration:
+                    break
+            return True
         elif op == 3:
             # NEQ: Test for inequality
             return not self.__richcmp(other, 2)
