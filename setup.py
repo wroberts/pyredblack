@@ -15,18 +15,18 @@ with open(path.join(HERE, 'README.rst'), encoding='utf-8') as f:
 with open(path.join(HERE, 'pyredblack', 'prbconfig.h'), 'w') as f:
     f.write('int PYTHON_VERSION2 = {};\n'.format(int(sys.version_info[0] == 2)))
 
-# hack in our own command line argument
 USE_CYTHON = False
-if '--with-cython' in sys.argv:
-    sys.argv.remove('--with-cython')
+try:
+    from Cython.Build import cythonize
     USE_CYTHON = True
+except ImportError:
+    pass
 
 PYREDBLACK_EXTENSIONS = [Extension(
     "pyredblack/redblack",
     ['pyredblack/redblack' + ('.pyx' if USE_CYTHON else '.cpp')],
     language="c++")]
 if USE_CYTHON:
-    from Cython.Build import cythonize
     PYREDBLACK_EXTENSIONS = cythonize(PYREDBLACK_EXTENSIONS)
 
 setup(

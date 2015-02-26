@@ -2,7 +2,7 @@
  Packaging Notes
 =================
 
-python setup.py --with-cython sdist
-python setup.py --with-cython bdist_wheel
-python3.4 setup.py --with-cython bdist_wheel
+python setup.py sdist
+python setup.py bdist_wheel
+python3.4 setup.py bdist_wheel
 twine upload dist/*
