@@ -64,7 +64,7 @@ cdef extern from "pyredblack.h":
         #bool remove(pyobjpairw value)
         bool del_key(object key)
         bool del_key_save_value(object key, object value)
-        object get_value_for_key(object key, bool &found)
+        PyObject* get_value_for_key(object key, bool &found)
         bool set_key(object key, object value)
         bool pop_first_save_item(object key, object value)
         PairRBTreeIterator begin()
@@ -430,7 +430,7 @@ cdef class rbdict(object):
         '''
         _hash = hash(key)
         cdef bool found = False
-        value = self._tree.get_value_for_key(key, found)
+        value = <object>self._tree.get_value_for_key(key, found)
         if not found:
             return self.__missing__(key)
         return value
@@ -500,7 +500,7 @@ cdef class rbdict(object):
         '''
         _hash = hash(key)
         cdef bool found = False
-        value = self._tree.get_value_for_key(key, found)
+        value = <object>self._tree.get_value_for_key(key, found)
         if not found:
             return default
         return value
