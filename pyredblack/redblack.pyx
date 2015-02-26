@@ -191,7 +191,7 @@ cdef class rbset(object):
             raise NotImplementedError
         elif op == 3:
             # NEQ: Test for inequality
-            raise NotImplementedError
+            return not self.__richcmp(other, 2)
         elif op == 4:
             # GT: Test whether the set is a proper superset of
             # `other`, that is, `set >= other` and `set != other`.
