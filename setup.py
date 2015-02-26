@@ -23,7 +23,7 @@ except ImportError:
     pass
 
 PYREDBLACK_EXTENSIONS = [Extension(
-    "pyredblack/redblack",
+    "pyredblack.redblack",
     ['pyredblack/redblack' + ('.pyx' if USE_CYTHON else '.cpp')],
     language="c++")]
 if USE_CYTHON:
