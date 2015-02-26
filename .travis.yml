@@ -1,10 +1,10 @@
 language: python
 python:
-  - "2.6"
   - "2.7"
   - "3.2"
   - "3.3"
   - "3.4"
+before_install: "cython --cplus pyredblack/redblack.pyx"
 # command to install dependencies
 install: "pip install ."
 # command to run tests
