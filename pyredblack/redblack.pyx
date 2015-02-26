@@ -7,16 +7,12 @@ redblack.pyx
 Cython source to make red-black tree-based containers.
 '''
 
-include "config.pxi"
 from libcpp cimport bool
 from cpython.ref cimport PyObject
 from cython.operator import dereference, preincrement
 
-#cdef extern from "<utility>" namespace "std":
-#    cdef cppclass pair[K,V]:
-#        pair(const K& a, const V& b) except +
-#        K first
-#        V second
+cdef extern from "prbconfig.h":
+    cdef int PYTHON_VERSION2
 
 cdef extern from "pyredblack.h":
     cdef cppclass ObjectRBTreeIterator:
@@ -468,23 +464,23 @@ cdef class rbdict(object):
 
     def keys(self):
         '''Return a copy of the dictionary’s list of keys.'''
-        IF PYTHON_VERSION2 == 1:
+        if PYTHON_VERSION2 == 1:
             return list(self.iterkeys())
-        ELSE:
+        else:
             return self.iterkeys()
 
     def values(self):
         '''Return a copy of the dictionary’s list of values.'''
-        IF PYTHON_VERSION2 == 1:
+        if PYTHON_VERSION2 == 1:
             return list(self.itervalues())
-        ELSE:
+        else:
             return self.itervalues()
 
     def items(self):
         '''Return a copy of the dictionary’s list of `(key, value)` pairs.'''
-        IF PYTHON_VERSION2 == 1:
+        if PYTHON_VERSION2 == 1:
             return list(self.iteritems())
-        ELSE:
+        else:
             return self.iteritems()
 
     def has_key(self, key):

@@ -12,8 +12,8 @@ with open(path.join(HERE, 'pyredblack', 'VERSION'), encoding='utf-8') as f:
 with open(path.join(HERE, 'README.rst'), encoding='utf-8') as f:
     LONG_DESCRIPTION = f.read()
 
-with open(path.join(HERE, 'pyredblack', 'config.pxi'), 'w') as f:
-    f.write('DEF PYTHON_VERSION2 = {}\n'.format(int(sys.version_info[0] == 2)))
+with open(path.join(HERE, 'pyredblack', 'prbconfig.h'), 'w') as f:
+    f.write('int PYTHON_VERSION2 = {};\n'.format(int(sys.version_info[0] == 2)))
 
 # hack in our own command line argument
 USE_CYTHON = False
