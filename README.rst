@@ -2,6 +2,9 @@
  pyredblack
 ============
 
+.. image:: https://travis-ci.org/wroberts/pyredblack.svg?branch=master
+    :target: https://travis-ci.org/wroberts/pyredblack
+
 Copyright (c) 2015 Will Roberts <wildwilhelm@gmail.com>
 
 Licensed under the MIT License (see ``LICENSE.rst`` for details).
