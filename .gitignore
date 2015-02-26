@@ -5,4 +5,4 @@
 /pyredblack/config.pxi
 /pyredblack/redblack.cpp
 /pyredblack/redblack.so
-/test
+/testcpp/test

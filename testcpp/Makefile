@@ -1,6 +1,6 @@
 TARGET   = test
 OBJS     = test.o
-FLAGS    = -g -O0 -Wall
+FLAGS    = -I.. -g -O0 -Wall
 INCLUDES =
 LIBS     =
 CC       = gcc
