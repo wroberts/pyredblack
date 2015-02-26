@@ -6,8 +6,7 @@ python:
   - "3.4"
 before_install:
   - "pip install cython"
-  - "cython --cplus pyredblack/redblack.pyx"
 # command to install dependencies
-install: "python setup.py build_ext --inplace"
+install: "pip install ."
 # command to run tests
 script: nosetests
