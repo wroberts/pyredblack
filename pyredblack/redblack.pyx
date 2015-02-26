@@ -166,11 +166,15 @@ cdef class rbset(object):
 
     def issubset(self, other):
         '''Test whether every element in the set is in `other`.'''
-        return self.__richcmp__(rbset(other), 1)
+        if not isinstance(other, (set, frozenset, rbset)):
+            other = rbset(other)
+        return self.__richcmp__(other, 1)
 
     def issuperset(self, other):
         '''Test whether every element in `other` is in the set.'''
-        return self.__richcmp__(rbset(other), 5)
+        if not isinstance(other, (set, frozenset, rbset)):
+            other = rbset(other)
+        return self.__richcmp__(other, 5)
 
     def __richcmp__(self, other, op):
         if not isinstance(other, (set, frozenset, rbset)):
@@ -220,7 +224,9 @@ cdef class rbset(object):
         '''
         Return a new set with elements common to the set and all others.
         '''
-        return self.__and__(rbset(other))
+        if not isinstance(other, (set, frozenset, rbset)):
+            other = rbset(other)
+        return self.__and__(other)
 
     def __and__(self, other):
         '''
@@ -235,7 +241,9 @@ cdef class rbset(object):
         Return a new set with elements in the set that are not in the
         others.
         '''
-        return self.__sub__(rbset(other))
+        if not isinstance(other, (set, frozenset, rbset)):
+            other = rbset(other)
+        return self.__sub__(other)
 
     def __sub__(self, other):
         '''
@@ -251,7 +259,9 @@ cdef class rbset(object):
         Return a new set with elements in either the set or `other` but
         not both.
         '''
-        return self.__xor__(rbset(other))
+        if not isinstance(other, (set, frozenset, rbset)):
+            other = rbset(other)
+        return self.__xor__(other)
 
     def __xor__(self, other):
         '''
@@ -285,9 +295,13 @@ cdef class rbset(object):
         '''
         Update the set, keeping only elements found in it and all others.
         '''
-        self.__iand__(rbset(other))
+        if not isinstance(other, (set, frozenset, rbset)):
+            other = rbset(other)
+        self.__iand__(other)
         for other in others:
-            self.__iand__(rbset(other))
+            if not isinstance(other, (set, frozenset, rbset)):
+                other = rbset(other)
+            self.__iand__(other)
 
     def __iand__(self, other):
         '''
@@ -299,9 +313,13 @@ cdef class rbset(object):
 
     def difference_update(self, other, *others):
         '''Update the set, removing elements found in others.'''
-        self.__iand__(rbset(other))
+        if not isinstance(other, (set, frozenset, rbset)):
+            other = rbset(other)
+        self.__iand__(other)
         for other in others:
-            self.__iand__(rbset(other))
+            if not isinstance(other, (set, frozenset, rbset)):
+                other = rbset(other)
+            self.__iand__(other)
 
     def __isub__(self, other):
         '''Update the set, removing elements found in others.'''
@@ -314,7 +332,9 @@ cdef class rbset(object):
         Update the set, keeping only elements found in either set, but not
         in both.
         '''
-        self.__ixor__(rbset(other))
+        if not isinstance(other, (set, frozenset, rbset)):
+            other = rbset(other)
+        self.__ixor__(other)
 
     def __ixor__(self, other):
         '''
