@@ -341,7 +341,11 @@ cdef class rbset(object):
         '''
         if not isinstance(other, (set, frozenset, rbset)):
             raise TypeError('unsupported operand type(s) for &=')
-        raise NotImplementedError
+        # TODO: with access to the iterator, this could be done in one
+        # traversal
+        rv = self.__and__(other)
+        self.clear()
+        self.update(rv)
 
     def difference_update(self, other, *others):
         '''Update the set, removing elements found in others.'''
@@ -357,7 +361,11 @@ cdef class rbset(object):
         '''Update the set, removing elements found in others.'''
         if not isinstance(other, (set, frozenset, rbset)):
             raise TypeError('unsupported operand type(s) for -=')
-        raise NotImplementedError
+        # TODO: with access to the iterator, this could be done in one
+        # traversal
+        rv = self.__sub__(other)
+        self.clear()
+        self.update(rv)
 
     def symmetric_difference_update(self, other):
         '''
@@ -375,7 +383,11 @@ cdef class rbset(object):
         '''
         if not isinstance(other, (set, frozenset, rbset)):
             raise TypeError('unsupported operand type(s) for ^=')
-        raise NotImplementedError
+        # TODO: with access to the iterator, this could be done in one
+        # traversal
+        rv = self.__xor__(other)
+        self.clear()
+        self.update(rv)
 
 
 cdef class rbdict(object):
