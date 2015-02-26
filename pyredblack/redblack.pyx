@@ -294,8 +294,9 @@ cdef class rbset(object):
 
     def update(self, other, *others):
         '''Update the set, adding elements from all others.'''
-        for elem in other:
-            self.add(elem)
+        if other:
+            for elem in other:
+                self.add(elem)
         for other in others:
             for elem in other:
                 self.add(elem)
