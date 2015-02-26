@@ -284,7 +284,9 @@ cdef class rbset(object):
         '''
         if not isinstance(other, (set, frozenset, rbset)):
             raise TypeError('unsupported operand type(s) for ^')
-        raise NotImplementedError
+        rv = rbset(elem for elem in self if elem not in other)
+        rv.update(elem for elem in other if elem not in self)
+        return rv
 
     def copy(self):
         '''Return a new set with a shallow copy of the set.'''
