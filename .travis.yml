@@ -8,6 +8,6 @@ before_install:
   - "pip install cython"
   - "cython --cplus pyredblack/redblack.pyx"
 # command to install dependencies
-install: "pip install ."
+install: "python setup.py build_ext --inplace"
 # command to run tests
 script: nosetests
