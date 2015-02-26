@@ -243,7 +243,9 @@ cdef class rbset(object):
         '''Return a new set with elements from the set and all others.'''
         if not isinstance(other, (set, frozenset, rbset)):
             raise TypeError('unsupported operand type(s) for |')
-        return rbset(self, other)
+        rv = rbset(self)
+        rv.update(other)
+        return rv
 
     def intersection(self, other, *others):
         '''
