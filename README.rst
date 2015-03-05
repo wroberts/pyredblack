@@ -13,14 +13,13 @@ Cython interface to red-black trees implemented in C++.
 
 `Red-black trees`_ are a kind of `self-balancing binary tree`_.  They
 maintain their entries in sorted order and have O(log n) for
-insertion, lookup, and deletion.  You can read more about red-black
-trees `here
-<http://www.eternallyconfuzzled.com/tuts/datastructures/jsw_tut_rbtree.aspx>`_
-and see animations of insertion, lookup, and deletion `here
-<https://www.cs.usfca.edu/~galles/visualization/RedBlack.html>`_.
+insertion, lookup, and deletion.  You can `read more about red-black
+trees`_ and `see animations of insertion, lookup, and deletion`_.
 
 .. _`Red-black trees`: http://en.wikipedia.org/wiki/Red%E2%80%93black_tree
 .. _`self-balancing binary tree`: http://en.wikipedia.org/wiki/Self-balancing_binary_search_tree
+.. _`read more about red-black trees`: http://www.eternallyconfuzzled.com/tuts/datastructures/jsw_tut_rbtree.aspx
+.. _`see animations of insertion, lookup, and deletion`: https://www.cs.usfca.edu/~galles/visualization/RedBlack.html
 
 This package provides dictionary and set objects based on
 red-black-trees; these can be used as drop-in replacements for the
