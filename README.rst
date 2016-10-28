@@ -5,6 +5,14 @@
 .. image:: https://travis-ci.org/wroberts/pyredblack.svg?branch=master
     :target: https://travis-ci.org/wroberts/pyredblack
 
+.. image:: https://coveralls.io/repos/wroberts/pyredblack/badge.svg?branch=master
+  :target: https://coveralls.io/r/wroberts/pyredblack?branch=master
+     :alt: Test code coverage
+
+.. image:: https://img.shields.io/pypi/v/pyredblack.svg
+    :target: https://pypi.python.org/pypi/pyredblack/
+    :alt: Latest Version
+
 Copyright (c) 2015 Will Roberts <wildwilhelm@gmail.com>
 
 Licensed under the MIT License (see ``LICENSE.rst`` for details).
