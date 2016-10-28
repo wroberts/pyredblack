@@ -10,5 +10,5 @@ before_install:
 # command to install dependencies
 install: "python setup.py build_ext --inplace"
 # command to run tests
-script: coverage run --source=pytimeparse setup.py test
+script: coverage run --source=pyredblack setup.py test
 after_success: coveralls
